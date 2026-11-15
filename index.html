@@ -121,20 +121,6 @@
   .start-row input{font:inherit;padding:10px 14px;border:2px solid var(--line);border-radius:12px;flex:1 1 200px}
   .reward-list li{margin:3px 0}
   .sync{font-size:.8rem;opacity:.9;white-space:nowrap}
-  /* 선생님 모드 */
-  .tbanner{background:#7a3fd1;color:#fff;text-align:center;font-size:.9rem;font-weight:700;padding:6px 10px}
-  #tpanel{position:fixed;left:14px;bottom:14px;z-index:45;width:290px;background:#fff;border:2px solid #7a3fd1;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:.9rem}
-  #tpanel .th{background:#7a3fd1;color:#fff;padding:8px 12px;border-radius:13px 13px 0 0;font-weight:800;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-  #tpanel.min .tb{display:none}#tpanel.min .th{border-radius:13px}
-  #tpanel .tb{padding:10px 12px;display:grid;gap:7px;max-height:70vh;overflow:auto}
-  #tpanel button{font:inherit;font-size:.86rem;text-align:left;border:1px solid var(--line);background:#faf8ff;border-radius:10px;padding:7px 10px;cursor:pointer}
-  #tpanel button:hover{border-color:#7a3fd1}
-  #tpanel button.on{background:#ede4fb;border-color:#7a3fd1;font-weight:700}
-  #tpanel .tmsg{font-size:.82rem;background:#f6f6f6;border-radius:8px;padding:7px 9px;line-height:1.5;word-break:break-all}
-  #tpanel .tmsg.ok{background:var(--ok-soft);color:#11603f}#tpanel .tmsg.no{background:var(--bad-soft);color:#8f2525}
-  #tpanel a{color:#7a3fd1;font-size:.85rem}
-  body.showans .opts button.ans{outline:3px dashed var(--ok);outline-offset:2px}
-  body.showans .opts button.ans::after{content:"  ← 정답";color:var(--ok);font-weight:800}
   .start-row input.small{flex:0 0 90px}
   .start-row input:disabled{background:#f2f2f2;color:#52606d}
   #cert{display:none;margin-top:18px}
@@ -640,14 +626,13 @@ const QUIZ = {
 };
 
 /* ================= 저장 ================= */
-const TEACHER=/[?&]teacher/.test(location.search); // 주소 끝에 ?teacher → 선생님 모드
-const KEY="force-unit-chunjae-v3"+(TEACHER?"-teacher":"");   // 선생님 모드 기록은 학생 기록과 따로 저장
+const KEY="force-unit-chunjae-v3";
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 let state=load();
 state.done=state.done||{}; state.page=state.page||0; state.xp=state.xp||0; state.q=state.q||{};
 state.badges=state.badges||{}; state.sims=state.sims||{}; state.stars=state.stars||{}; state.name=state.name||""; state.cls=state.cls||""; state.num=state.num||"";
-if(TEACHER&&!state.name){state.cls="0";state.num="0";state.name="선생님 테스트";}
+const TEACHER=/[?&]teacher/.test(location.search); // 주소 끝에 ?teacher → 모든 단계 열림
 
 /* ================= 보상 데이터 ================= */
 const LEVELS=[[0,"힘 새싹","🌱"],[120,"힘 탐험가","🧭"],[270,"힘 연구원","🔬"],[420,"힘 박사","🎓"],[600,"힘 마스터","👑"]];
@@ -713,8 +698,7 @@ function confetti(){
     const p=document.createElement("i"); p.className="confetti";
     p.style.left=Math.random()*100+"vw"; p.style.background=colors[i%colors.length];
     p.style.animationDuration=(1.6+Math.random()*1.4)+"s"; p.style.animationDelay=Math.random()*0.3+"s";
-    document.body.appendChild(p);
-  if(window.innerWidth<700){p.classList.add("min");} setTimeout(()=>p.remove(),3400);
+    document.body.appendChild(p); setTimeout(()=>p.remove(),3400);
   }
 }
 function renderBadges(){
@@ -814,7 +798,7 @@ document.querySelectorAll(".quiz").forEach(box=>{
       fb.className="fb ok"; fb.textContent=msg+item.e;
     };
     item.o.forEach((t,oi)=>{
-      const b=document.createElement("button"); b.textContent=`${"①②③④⑤"[oi]} ${t}`; if(oi===item.a) b.classList.add("ans");
+      const b=document.createElement("button"); b.textContent=`${"①②③④⑤"[oi]} ${t}`;
       b.onclick=()=>{
         if(oi===item.a){
           state.q[key]=missed?"retry":"first"; save();
@@ -870,7 +854,7 @@ function snapshot(){
     badges:Object.keys(state.badges).length,first:qs.filter(v=>v==="first").length,retry:qs.filter(v=>v==="retry").length,finalScore};
 }
 function report(answer){
-  if(!SHEET_URL||(TEACHER&&!state.tSend)||!state.name||!state.done[0]) return;
+  if(!SHEET_URL||TEACHER||!state.name||!state.done[0]) return;
   if(!answer) outbox=outbox.filter(x=>x.answer);           // 상태 기록은 가장 최근 것만 남김
   outbox.push({token:SHEET_TOKEN,student:{cls:state.cls,num:state.num,name:state.name},snap:snapshot(),answer:answer||null});
   if(outbox.length>400) outbox=outbox.slice(-400);
@@ -899,7 +883,7 @@ async function flush(){
 }
 function renderSync(){
   const s=$("sync"); if(!s) return;
-  if(!SHEET_URL||!state.name||(TEACHER&&!state.tSend)){s.textContent=TEACHER?"☁️ 시트로 보내지 않음(선생님 모드)":"";return;}
+  if(!SHEET_URL||!state.name||TEACHER){s.textContent="";return;}
   s.textContent=syncErr||(outbox.length?`☁️ 보내는 중… (${outbox.length})`:"☁️ 선생님께 기록 저장됨");
 }
 setInterval(flush,30000);
@@ -1241,70 +1225,9 @@ document.querySelectorAll(".sim").forEach((s,i)=>{
   s.addEventListener("click",e=>{if(e.target.tagName==="BUTTON")h();});
 });
 
-
-/* ================= 👩‍🏫 선생님 모드 ================= */
-function teacherMode(){
-  if(!TEACHER) return;
-  const ban=document.createElement("div"); ban.className="tbanner";
-  ban.textContent="👩‍🏫 선생님 모드 · 모든 단계 열림 · 학생 기록과 따로 저장돼요";
-  document.body.insertBefore(ban,document.body.firstChild);
-  const p=document.createElement("div"); p.id="tpanel";
-  p.innerHTML=`<div class="th" id="tHead"><span>👩‍🏫 선생님 도구</span><span id="tFold">▾</span></div>
-  <div class="tb">
-    <button id="tConn">🔌 구글 시트 연결 테스트</button>
-    <div class="tmsg" id="tMsg">${SHEET_URL?"시트 주소가 들어가 있어요. 위 버튼으로 연결을 확인해 보세요.":"⚠️ index.html의 SHEET_URL이 비어 있어요. 웹 앱 주소를 넣어야 기록이 시트로 가요."}</div>
-    <button id="tSend">☁️ 내 테스트 기록도 시트로 보내기</button>
-    <button id="tAns">👁 정답 표시하기</button>
-    <button id="tAuto">⚡ 이 단계 문제 자동으로 풀기</button>
-    <button id="tReset">↺ 선생님 테스트 기록 처음부터</button>
-    <a id="tStudent" target="_blank">📱 학생 화면으로 열기 (새 탭)</a>
-  </div>`;
-  document.body.appendChild(p);
-  if(window.innerWidth<700){p.classList.add("min");}
-  const sync=()=>{$("tSend").classList.toggle("on",!!state.tSend);$("tSend").textContent=state.tSend?"✅ 테스트 기록 시트로 보내는 중":"☁️ 내 테스트 기록도 시트로 보내기";
-    $("tAns").classList.toggle("on",!!state.tAns);document.body.classList.toggle("showans",!!state.tAns);$("tAns").textContent=(state.tAns?"✅ 정답 표시 중":"👁 정답 표시하기");renderSync();};
-  const fold=()=>$("tFold").textContent=p.classList.contains("min")?"▴ 펼치기":"▾ 접기";
-  $("tHead").onclick=()=>{p.classList.toggle("min");fold();}; fold();
-  $("tSend").onclick=()=>{state.tSend=!state.tSend;save();sync();if(state.tSend){report();msg("이제부터 이 화면의 기록이 시트에 ‘0반 0번 "+state.name+"’ 이름으로 쌓여요. 시트 메뉴의 ‘③ 선생님 테스트 기록 지우기’로 한 번에 지울 수 있어요.","ok");}};
-  $("tAns").onclick=()=>{state.tAns=!state.tAns;save();sync();};
-  $("tAuto").onclick=autoSolve;
-  $("tReset").onclick=()=>{if(!confirm("선생님 모드의 진도·경험치·배지를 지울까요? (학생 기록과 시트는 그대로예요)"))return;try{localStorage.removeItem(KEY)}catch(e){}location.href=location.pathname+location.search;};
-  $("tStudent").href=location.pathname;
-  $("tConn").onclick=connTest;
-  sync();
-}
-function msg(t,k){const m=$("tMsg");m.className="tmsg "+(k||"");m.textContent=t;}
-async function connTest(){
-  if(!SHEET_URL){msg("⚠️ SHEET_URL이 비어 있어요. Apps Script를 웹 앱으로 배포한 뒤 받은 주소(…/exec)를 index.html의 SHEET_URL에 넣어 주세요.","no");return;}
-  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(SHEET_URL)&&!/127\.0\.0\.1|localhost/.test(SHEET_URL)) msg("주소 모양이 …/macros/s/…/exec 가 아니에요. 그래도 시도해 볼게요…");
-  else msg("연결 확인 중…");
-  const body=JSON.stringify({token:SHEET_TOKEN,student:{cls:"0",num:"0",name:"연결 테스트"},snap:snapshot(),answer:{id:"conn-"+Date.now(),lesson:"연결 테스트",qno:0,question:"선생님 연결 테스트",result:"테스트",wrongs:""}});
-  try{
-    const res=await fetch(SHEET_URL,{method:"POST",body});
-    const j=await res.json();
-    if(j.ok) msg("✅ 연결 성공! 시트의 ‘학생현황’에 ‘0반 0번 연결 테스트’ 줄이 생겼어요. (시트 메뉴 ③으로 지울 수 있어요)","ok");
-    else if(j.error==="token") msg("❌ 시트에는 닿았지만 암호가 달라요. index.html의 SHEET_TOKEN과 Code.gs의 TOKEN을 똑같이 맞춰 주세요.","no");
-    else msg("❌ 시트가 거절했어요: "+j.error+" (잠시 뒤 다시 시도해 보세요)","no");
-  }catch(e){
-    try{
-      await fetch(SHEET_URL,{method:"POST",mode:"no-cors",body});
-      msg("📨 보내기는 했지만 답장을 읽지 못했어요. 시트 ‘학생현황’에 ‘0반 0번 연결 테스트’ 줄이 생겼는지 직접 확인해 주세요. 안 생겼다면 배포 설정의 ‘액세스 권한: 모든 사용자’를 확인하세요.");
-    }catch(e2){msg("❌ 연결 실패. 인터넷 연결과 SHEET_URL 주소를 확인해 주세요.","no");}
-  }
-}
-async function autoSolve(){
-  const sec=lessons[state.page], wait=ms=>new Promise(r=>setTimeout(r,ms));
-  const qz=sec.querySelector(".quiz");
-  if(!qz){if(state.page===0&&!state.done[0]){$("startBtn").click();}else toast("이 화면에는 문제가 없어요","lock");return;}
-  for(const opts of qz.querySelectorAll(".opts")){
-    const a=opts.querySelector("button.ans");
-    if(a&&!a.disabled){a.click();await wait(150);}
-  }
-}
-
 /* ================= 시작 ================= */
 drawArrow(); drawG(); drawSp(); drawFr(); drawBy(); drawNet(); mvStatic(); subAnim();
-renderStats(); lockIdentity(); quizChecks.forEach(f=>f()); teacherMode(); flush();
+renderStats(); lockIdentity(); quizChecks.forEach(f=>f()); flush();
 if(!unlocked(state.page)) state.page=0;
 go(state.page);
 </script>
