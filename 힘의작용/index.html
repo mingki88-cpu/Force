@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>중1 과학 Ⅴ. 힘의 작용 – 한 단계씩 공부하기</title>
+<style>
+  :root{
+    --bg:#f6f4ef; --card:#ffffff; --ink:#1f2933; --sub:#52606d; --line:#e4e0d6;
+    --main:#2f6fde; --main-soft:#e6eefc; --ok:#1f9d6b; --ok-soft:#e3f5ed;
+    --bad:#d64545; --bad-soft:#fbe9e9; --warn:#e08a00; --warn-soft:#fdf2dd;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:17px}
+  header{background:#1d3557;color:#fff;padding:18px 20px 14px}
+  header h1{margin:0;font-size:1.35rem;letter-spacing:-.02em}
+  header p{margin:2px 0 10px;opacity:.85;font-size:.92rem}
+  .progress{height:10px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden}
+  .progress>div{height:100%;width:0;background:#ffd166;transition:width .4s}
+  .progress-label{font-size:.82rem;margin-top:4px;opacity:.9}
+  nav{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  nav button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font:inherit;font-size:.88rem;cursor:pointer;color:var(--sub)}
+  nav button.active{background:var(--main);border-color:var(--main);color:#fff;font-weight:700}
+  nav button.done::after{content:" ✔";color:var(--ok)}
+  nav button.active.done::after{color:#ffd166}
+  nav button.locked{opacity:.45}
+  nav button.locked::before{content:"🔒 "}
+  nav .part{flex:0 0 auto;align-self:center;font-size:.75rem;font-weight:800;color:#9aa5b1;padding:0 2px 0 8px}
+  main{max-width:900px;margin:0 auto;padding:22px 16px 80px}
+  section.lesson{display:none;animation:fade .3s}
+  section.lesson.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .crumb{font-size:.85rem;color:var(--main);font-weight:700}
+  h2{font-size:1.5rem;margin:.1em 0 .1em;letter-spacing:-.02em}
+  .goal{color:var(--sub);margin:0 0 18px;font-size:.95rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .card h3{margin:0 0 8px;font-size:1.12rem}
+  .step-tag{display:inline-block;font-size:.78rem;font-weight:700;color:var(--main);background:var(--main-soft);padding:2px 10px;border-radius:99px;margin-bottom:6px}
+  .key{background:var(--warn-soft);border-left:5px solid var(--warn);border-radius:10px;padding:12px 16px;margin:12px 0}
+  .key b{color:#9a5b00}
+  .formula{font-size:1.1rem;text-align:center;background:#f2f5fb;border-radius:10px;padding:10px;margin:10px 0;font-weight:700}
+  table{border-collapse:collapse;width:100%;margin:8px 0;font-size:.95rem}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:center}
+  th{background:#f2f0ea}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:700px){.grid2,.grid3,.grid4{grid-template-columns:1fr}body{font-size:16px}}
+  .ex{background:#f8f7f3;border-radius:12px;padding:12px 14px}
+  .ex b{display:block;margin-bottom:2px}
+  .wonder{background:#eef6ff;border:1px solid #cfe2fb;border-radius:12px;padding:12px 14px;margin:10px 0}
+  .sim{background:#fbfcff;border:1px dashed #b9c8e8;border-radius:14px;padding:14px}
+  .sim svg{width:100%;height:auto;display:block;background:#fff;border-radius:10px;border:1px solid var(--line)}
+  .controls{display:flex;flex-wrap:wrap;gap:14px 22px;margin-top:12px;align-items:center}
+  .controls label{font-size:.92rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  input[type=range]{width:160px;accent-color:var(--main)}
+  select,input[type=number]{font:inherit;font-size:.95rem;padding:4px 8px;border:1px solid var(--line);border-radius:8px}
+  .readout{margin-top:10px;font-weight:700;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+  .seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg button{border:0;border-right:1px solid var(--line);background:#fff;padding:6px 12px;font:inherit;font-size:.88rem;cursor:pointer}
+  .seg button:last-child{border-right:0}
+  .seg button.on{background:var(--main);color:#fff}
+  .quiz .q{margin:16px 0 6px;font-weight:700}
+  .quiz .qitem{border-top:1px dashed var(--line);padding-top:6px;margin-top:14px}
+  .quiz .qitem:first-of-type{border-top:0}
+  .qfig-wrap svg.qfig{display:block;width:100%;max-width:600px;height:auto;margin:6px auto 12px;background:#fff;border:1px solid var(--line);border-radius:12px;font-family:inherit}
+  .qfig-wrap.efig svg.qfig{border-color:#bfe3cf;background:#f6fcf8;margin-top:8px}
+  .efcap{font-size:.85rem;font-weight:700;color:#11603f;margin-top:10px}
+  .opts{display:grid;gap:8px}
+  .opts button{text-align:left;font:inherit;font-size:.96rem;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer}
+  .opts button:hover:not(:disabled){border-color:var(--main)}
+  .opts button.right{background:var(--ok-soft);border-color:var(--ok)}
+  .opts button.wrong{background:var(--bad-soft);border-color:var(--bad)}
+  .opts button:disabled{cursor:default}
+  .fb{margin-top:8px;padding:9px 12px;border-radius:10px;font-size:.93rem;display:none}
+  .fb.ok{display:block;background:var(--ok-soft);color:#11603f}
+  .fb.no{display:block;background:var(--bad-soft);color:#8f2525}
+  .navbtns{display:flex;justify-content:space-between;margin-top:26px;gap:10px}
+  .btn{font:inherit;border:0;border-radius:12px;padding:11px 20px;cursor:pointer;font-weight:700}
+  .btn.primary{background:var(--main);color:#fff}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--sub)}
+  .btn:disabled{opacity:.45;cursor:default}
+  .tip{font-size:.88rem;color:var(--sub)}
+  .score{font-size:1.4rem;font-weight:800;text-align:center;padding:14px;border-radius:14px;background:var(--main-soft);margin-top:16px;display:none}
+  .badge{display:inline-block;padding:1px 8px;border-radius:6px;font-size:.85rem;font-weight:700;color:#fff}
+  .b1{background:#2f6fde}.b2{background:#e0561f}
+  /* 분류 게임 */
+  .urow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin:6px 0;background:#fff}
+  .urow .ut{flex:1 1 220px;font-size:.95rem}
+  .urow button{font:inherit;font-size:.85rem;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer}
+  .urow.ok{background:var(--ok-soft);border-color:var(--ok)}
+  .urow button.right{background:var(--ok);color:#fff;border-color:var(--ok)}
+  .urow button.wrong{background:var(--bad-soft);border-color:var(--bad)}
+  .shake{animation:shake .3s}
+  @keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  /* JavaLab */
+  .jl{border:2px solid #f0c36d;background:#fffbf1}
+  .jl .step-tag{background:#fdebc8;color:#8a5a00}
+  .jlitem{border:1px solid #f0dfb8;background:#fff;border-radius:12px;padding:12px 14px;margin:10px 0}
+  .jlitem b.t{font-size:1.02rem}
+  .srcTag{display:inline-block;font-size:.72rem;font-weight:800;border-radius:6px;padding:1px 7px;vertical-align:2px}
+  .srcTag.jl{background:#e6eefc;color:#2f6fde}.srcTag.sl{background:#e3f5ed;color:#1f7a55}.srcTag.ar{background:#f3e8ff;color:#7a3fd1}
+  .jlitem .todo{font-size:.92rem;color:var(--sub);margin:4px 0 8px}
+  .jlbtns{display:flex;gap:8px;flex-wrap:wrap}
+  .jlbtns button,.jlbtns a{font:inherit;font-size:.88rem;border-radius:10px;padding:7px 12px;cursor:pointer;text-decoration:none}
+  .jlbtns .open{background:#e08a00;color:#fff;border:0;font-weight:700}
+  .jlbtns a{border:1px solid #e0c48a;color:#8a5a00;background:#fff}
+  .jlframe{margin-top:10px;display:none}
+  .jlframe iframe{width:100%;height:560px;border:1px solid var(--line);border-radius:10px;background:#fff}
+  .jlsrc{font-size:.78rem;color:#9aa5b1;margin-top:6px;word-break:break-all}
+  .jlsrc a{color:#9aa5b1}
+  @media(max-width:700px){.jlframe iframe{height:460px}}
+  /* ===== 보상 시스템 ===== */
+  .stats{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;background:rgba(255,255,255,.1);border-radius:12px;padding:8px 12px;margin-bottom:10px}
+  .stats #lvIcon{font-size:1.6rem}
+  .stats #who{opacity:.85;font-size:.9rem}
+  .xpbar{flex:1 1 140px;height:12px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden;min-width:120px}
+  .xpbar>div{height:100%;width:0;background:linear-gradient(90deg,#06d6a0,#ffd166);transition:width .5s}
+  #xpText{font-size:.82rem;opacity:.95}
+  #badgeBtn{font:inherit;font-size:.88rem;border:0;border-radius:99px;padding:6px 12px;background:#ffd166;color:#1d3557;font-weight:800;cursor:pointer}
+  #resetTop{font:inherit;font-size:.82rem;border:1px solid rgba(255,255,255,.45);border-radius:99px;padding:5px 11px;background:transparent;color:#fff;cursor:pointer}
+  #resetTop:hover{background:rgba(255,255,255,.15)}
+  .rbox{text-align:left}
+  .rbox ul{margin:8px 0 14px;padding-left:20px;font-size:.93rem}
+  .rbox .rbtns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+  .btn.danger{background:var(--bad);color:#fff}
+  #badgeCnt{background:#1d3557;color:#fff;border-radius:99px;padding:0 7px;margin-left:2px}
+  #toasts{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:50;pointer-events:none}
+  .toast{background:#1d3557;color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.18);animation:pop .3s;transition:opacity .4s,transform .4s}
+  .toast.xp{background:#1f9d6b}.toast.combo{background:#e0561f}.toast.lock{background:#52606d}
+  .toast.out{opacity:0;transform:translateY(10px)}
+  @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:16px}
+  .modal.open{display:flex}
+  .modal-box{background:#fff;border-radius:20px;padding:26px 24px;max-width:380px;width:100%;text-align:center;animation:pop .35s}
+  .modal-box.wide{max-width:700px;max-height:85vh;overflow:auto}
+  .modal-box .big{font-size:4.2rem;line-height:1.2;animation:bounce 1s infinite alternate}
+  @keyframes bounce{to{transform:translateY(-8px) scale(1.06)}}
+  .modal-box h3{margin:8px 0 4px;font-size:1.3rem}
+  .stars{font-size:1.25rem;letter-spacing:2px;margin-top:4px}
+  .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:14px 0}
+  .bitem{border:2px solid #ffd166;background:#fffaf0;border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .bitem.off{border-color:var(--line);background:#f4f4f4;filter:grayscale(1);opacity:.6}
+  .bicon{font-size:2.2rem}
+  .bitem small{color:var(--sub);font-size:.78rem;line-height:1.35}
+  .confetti{position:fixed;top:-12px;width:10px;height:14px;z-index:60;border-radius:2px;animation:fall linear forwards;pointer-events:none}
+  @keyframes fall{to{top:105vh;transform:rotate(720deg) translateX(40px)}}
+  .start-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .start-row input{font:inherit;padding:10px 14px;border:2px solid var(--line);border-radius:12px;flex:1 1 200px}
+  .reward-list li{margin:3px 0}
+  .sync{font-size:.8rem;opacity:.9;white-space:nowrap}
+  /* 선생님 모드 */
+  .tbanner{background:#7a3fd1;color:#fff;text-align:center;font-size:.9rem;font-weight:700;padding:6px 10px}
+  #tpanel{position:fixed;left:14px;bottom:14px;z-index:45;width:290px;background:#fff;border:2px solid #7a3fd1;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:.9rem}
+  #tpanel .th{background:#7a3fd1;color:#fff;padding:8px 12px;border-radius:13px 13px 0 0;font-weight:800;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  #tpanel.min .tb{display:none}#tpanel.min .th{border-radius:13px}
+  #tpanel .tb{padding:10px 12px;display:grid;gap:7px;max-height:70vh;overflow:auto}
+  #tpanel button{font:inherit;font-size:.86rem;text-align:left;border:1px solid var(--line);background:#faf8ff;border-radius:10px;padding:7px 10px;cursor:pointer}
+  #tpanel button:hover{border-color:#7a3fd1}
+  #tpanel button.on{background:#ede4fb;border-color:#7a3fd1;font-weight:700}
+  #tpanel .tmsg{font-size:.82rem;background:#f6f6f6;border-radius:8px;padding:7px 9px;line-height:1.5;word-break:break-all}
+  #tpanel .tmsg.ok{background:var(--ok-soft);color:#11603f}#tpanel .tmsg.no{background:var(--bad-soft);color:#8f2525}
+  #tpanel a{color:#7a3fd1;font-size:.85rem}
+  body.showans .opts button.ans{outline:3px dashed var(--ok);outline-offset:2px}
+  body.showans .opts button.ans::after{content:"  ← 정답";color:var(--ok);font-weight:800}
+  .start-row input.small{flex:0 0 90px}
+  .start-row input:disabled{background:#f2f2f2;color:#52606d}
+  #stuSno{font-size:1.25rem;letter-spacing:.12em;font-weight:700}
+  .who{margin-top:12px;padding:14px;border-radius:12px;background:var(--main-soft);text-align:center;font-size:1.02rem}
+  .who.no{background:var(--bad-soft);color:#8f2525}.who.wait{background:#f4f4f4;color:var(--sub)}
+  .who .big2{font-size:2.2rem;line-height:1.2}
+  .who .rbtns{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+  #cert{display:none;margin-top:18px}
+  .cert-in{border:8px double #b8860b;background:#fffdf5;border-radius:6px;padding:30px 26px;text-align:center}
+  .cert-top{font-size:2rem;font-weight:900;letter-spacing:.3em;color:#7a5a00}
+  .cert-name{font-size:1.8rem;font-weight:800;margin:14px 0 6px;border-bottom:2px solid #b8860b;display:inline-block;padding:0 30px}
+  .cert-date{margin-top:16px;color:var(--sub)}
+  @media print{
+    body *{visibility:hidden}
+    #cert,#cert *{visibility:visible}
+    #cert{position:absolute;left:0;top:0;width:100%}
+    .noprint{display:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚖️ 중1 과학 Ⅴ. 힘의 작용</h1>
+  <p>천재교육(정대홍) 교과서 순서대로 · 개념 읽기 → 실험해 보기 → 확인 문제</p>
+  <div class="stats">
+    <span id="lvIcon">🌱</span><b id="lvName">Lv.1 힘 새싹</b><span id="who"></span>
+    <div class="xpbar"><div id="xpFill"></div></div><span id="xpText">0 XP</span>
+    <button id="badgeBtn">🎖 배지함 <span id="badgeCnt">0</span></button>
+    <button id="resetTop" title="진도를 처음부터 다시 시작해요">↺ 처음부터</button>
+    <span id="sync" class="sync"></span>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="progress-label" id="barLabel">학습 진도 0%</div>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- ============ 0. 시작 ============ -->
+<section class="lesson" data-title="시작하기" data-part="">
+  <h2>힘의 작용, 이렇게 공부해요</h2>
+  <p class="goal">교과서 151~189쪽의 흐름을 따라 한 단계씩 공부해요.</p>
+  <div class="card">
+    <h3>📚 단원 흐름</h3>
+    <table>
+      <tr><th>중단원</th><th>소단원</th><th>교과서</th></tr>
+      <tr><td rowspan="5">1. 여러 가지 힘</td><td>01 힘의 표현과 평형</td><td>154~155쪽</td></tr>
+      <tr><td>02 중력</td><td>156~159쪽</td></tr>
+      <tr><td>03 탄성력</td><td>160~163쪽</td></tr>
+      <tr><td>04 마찰력</td><td>164~165쪽</td></tr>
+      <tr><td>05 부력</td><td>166~169쪽</td></tr>
+      <tr><td rowspan="3">2. 힘과 우리 생활</td><td>01 알짜힘</td><td>174~175쪽</td></tr>
+      <tr><td>02 힘과 운동</td><td>176~179쪽</td></tr>
+      <tr><td>03 여러 가지 힘의 이용</td><td>180~183쪽</td></tr>
+      <tr><td colspan="2">대단원 마무리 → 🏆 종합 평가</td><td>186~189쪽</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>🎁 보상 규칙</h3>
+    <ul class="reward-list">
+      <li>⭕ 한 번에 정답 <b>+10 XP</b> · 다시 도전해서 정답 <b>+5 XP</b></li>
+      <li>🔥 3문제 연속 한 번에 정답이면 <b>콤보 보너스 +5 XP</b></li>
+      <li>🔬 실험 화면을 직접 조작해 보면 <b>탐구 보너스 +5 XP</b></li>
+      <li>🧪 ‘더 실험해 보기’의 가상실험을 열어 보면 <b>+3 XP</b>, 모두 열면 <b>🧪 가상실험 탐험가 배지</b></li>
+      <li>🎉 단계를 마치면 <b>+20 XP</b>와 <b>배지</b>, 한 번에 맞힌 비율만큼 <b>별(⭐ 최대 3개)</b></li>
+      <li>📈 경험치가 쌓이면 레벨 업! 🌱 새싹 → 🧭 탐험가 → 🔬 연구원 → 🎓 박사 → 👑 마스터</li>
+      <li>🗂 위쪽 탭에서 <b>원하는 단계를 골라</b> 공부할 수 있어요. 끝낸 단계에는 ✔ 표시가 붙어요.</li>
+      <li>🏆 모든 단계와 종합 평가를 끝내면 <b>수료증</b>을 받아요!</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🤔 궁금해! (교과서 153쪽)</h3>
+    <p>물놀이 공원에서 번지 점프를 하는 사람은 아래로 떨어지는데, 커다란 풍선놀이틀은 왜 가라앉지 않고 물 위에 뜰까요? 이 단원을 다 공부하면 답할 수 있어요.</p>
+  </div>
+  <div class="card">
+    <h3 id="startTitle">✏️ 이름을 적고 출발!</h3>
+    <div id="snoBox" style="display:none">
+      <div class="start-row">
+        <input id="stuSno" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="학번 (예: 10305)">
+        <button class="btn primary" id="snoBtn">확인</button>
+      </div>
+      <div id="snoResult"></div>
+    </div>
+    <div id="manualBox">
+      <div class="start-row">
+        <input id="stuCls" class="small" type="number" min="0" max="30" placeholder="반">
+        <input id="stuNum" class="small" type="number" min="0" max="60" placeholder="번호">
+        <input id="stuName" maxlength="20" placeholder="이름">
+        <button class="btn primary" id="startBtn">학습 시작하기 🚀</button>
+      </div>
+    </div>
+    <p class="tip" id="startTip">반, 번호, 이름은 수료증과 학습 기록에 쓰여요. 정확하게 적어 주세요.</p>
+  </div>
+</section>
+
+<!-- ============ 1-01 힘의 표현과 평형 ============ -->
+<section class="lesson" data-title="01 힘의 표현과 평형" data-part="1. 여러 가지 힘">
+  <div class="crumb">1. 여러 가지 힘 › 01 · 교과서 154~155쪽</div>
+  <h2>힘의 표현과 평형</h2>
+  <p class="goal">학습 목표: 물체에 작용하는 힘을 화살표로 나타내고, 힘의 평형을 이루는 조건을 설명할 수 있다.</p>
+  <div class="card">
+    <span class="step-tag">STEP 1 개념</span>
+    <h3>과학에서의 힘</h3>
+    <p>일상에서는 “잘 잤더니 힘이 나”, “역도 선수는 힘이 세”처럼 ‘힘’을 여러 뜻으로 써요. 하지만 과학에서는 뜻이 정해져 있어요.</p>
+    <div class="key"><b>과학에서의 힘</b>: 물체의 <b>모양</b>이나 <b>운동 상태</b>를 변화시키는 원인<br><b>운동 상태</b>: 물체의 <b>속력</b>과 <b>운동 방향</b></div>
+    <div class="grid3">
+      <div class="ex"><b>✈️ 종이비행기를 날린다</b>멈춰 있던 비행기의 속력이 변해요.</div>
+      <div class="ex"><b>💧 물풍선을 누른다</b>물풍선의 모양이 변해요.</div>
+      <div class="ex"><b>🎾 테니스공을 친다</b>공의 모양, 속력, 운동 방향이 모두 변해요.</div>
+    </div>
+  </div>
+  <div class="card">
+    <span class="step-tag">STEP 2 개념</span>
+    <h3>힘은 어떻게 표현할까?</h3>
+    <p>축구공을 찰 때 힘의 크기와 방향에 따라 공의 모양, 속력, 운동 방향이 달라져요. 크기와 방향이 같아도 <b>힘을 주는 지점(작용점)</b>이 다르면 결과가 달라질 수 있어요. 그래서 힘은 <b>크기, 방향, 작용점</b>을 함께 표시해요.</p>
+    <table>
+      <tr><th>화살표의</th><th>나타내는 것</th></tr>
+      <tr><td>길이</td><td>힘의 <b>크기</b></td></tr>
+      <tr><td>방향</td><td>힘의 <b>방향</b></td></tr>
+      <tr><td>시작점</td><td>힘의 <b>작용점</b> (힘을 주는 지점)</td></tr>
+    </table>
+    <p>힘의 크기 단위는 주로 <b>N(뉴턴)</b>을 사용해요.</p>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 3 실험해 보기</span>
+    <h3>🔬 수레에 작용하는 힘을 화살표로 나타내 보자</h3>
+    <svg id="arrowSvg" viewBox="0 0 600 260"></svg>
+    <div class="controls">
+      <label>힘의 크기 <input type="range" id="arMag" min="1" max="5" value="2"> <span id="arMagV">2 N</span></label>
+      <label>방향 <span class="seg" id="arDir">
+        <button data-d="r" class="on">→ 오른쪽</button><button data-d="l">← 왼쪽</button><button data-d="u">↑ 위</button><button data-d="d">↓ 아래</button></span></label>
+    </div>
+    <div class="readout" id="arOut"></div>
+    <p class="tip">모눈 한 칸 = 1 N 으로 정했어요. 힘이 2배가 되면 화살표 길이도 2배!</p>
+  </div>
+  <div class="card">
+    <span class="step-tag">STEP 4 개념</span>
+    <h3>힘은 어떻게 평형을 이룰까?</h3>
+    <p>줄다리기에서 양쪽이 크기가 같고 방향이 반대인 힘으로 줄을 당기면 줄은 어느 쪽으로도 움직이지 않아요.</p>
+    <div class="key"><b>힘의 평형</b>: 한 물체에 작용하는 두 힘이 <b>크기가 같고</b>, <b>같은 직선상</b>에서, <b>서로 반대 방향</b>으로 작용할 때 두 힘은 평형을 이룬다.</div>
+    <p class="tip">⚠️ 크기와 방향이 <u>모두 같은</u> 두 힘은 평형이 아니에요. 방향이 반대여야 해요!</p>
+  </div>
+  <div class="card quiz" data-quiz="1"><span class="step-tag">STEP 5 확인 문제</span></div>
+</section>
+
+<!-- ============ 1-02 중력 ============ -->
+<section class="lesson" data-title="02 중력" data-part="">
+  <div class="crumb">1. 여러 가지 힘 › 02 · 교과서 156~159쪽</div>
+  <h2>중력</h2>
+  <p class="goal">학습 목표: 중력의 특징을 방향과 크기로 설명하고, 무게와 질량을 구별할 수 있다.</p>
+  <div class="card">
+    <span class="step-tag">STEP 1 개념</span>
+    <h3>아래로 떨어지게 하는 힘은 무엇일까?</h3>
+    <p>눈은 하늘에서 내리고, 고드름은 아래로 자라요. 스카이다이버나 폭포수도 지표면을 향해 떨어지지요.</p>
+    <div class="key"><b>중력</b>: 지구가 물체를 끌어당기는 힘<br><b>중력의 방향</b>: <b>지구 중심 방향</b></div>
+    <p>그래서 지구 어느 곳에서 공을 놓아도, 공은 그곳에서 지구 중심을 향해 떨어져요.</p>
+  </div>
+  <div class="card">
+    <span class="step-tag">STEP 2 개념</span>
+    <h3>무게와 질량은 어떻게 다를까?</h3>
+    <table>
+      <tr><th></th><th>무게</th><th>질량</th></tr>
+      <tr><td>뜻</td><td>물체에 작용하는 <b>중력의 크기</b></td><td>물체의 <b>고유한 양</b></td></tr>
+      <tr><td>단위</td><td>N (뉴턴)</td><td>kg, g</td></tr>
+      <tr><td>장소가 바뀌면</td><td><b>달라진다</b></td><td><b>변하지 않는다</b></td></tr>
+    </table>
+    <div class="key">· 지구에서 질량 1 kg인 물체의 무게는 약 <b>9.8 N</b><br>· 무게는 질량에 <b>비례</b> → 질량이 클수록 무게가 크다<br>· 달의 중력은 지구의 약 <b>1/6</b> → 달에서 잰 무게는 지구의 약 1/6</div>
+    <div class="ex"><b>🍎 교과서 예시</b>질량 300 g인 사과의 무게는 지구에서 2.94 N, 달에서는 0.49 N이에요. 하지만 질량은 어디서나 300 g!</div>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 3 실험해 보기</span>
+    <h3>🔬 다른 천체에서 무게를 재 보자</h3>
+    <div class="controls">
+      <label>질량 <input type="number" id="gm" value="300" min="1" max="200000" style="width:100px"> g</label>
+      <span class="seg" id="gPreset"><button data-g="300">🍎 사과 300 g</button><button data-g="1000">1 kg</button><button data-g="50000">🧑 50 kg</button></span>
+    </div>
+    <svg id="gSvg" viewBox="0 0 600 150" style="margin-top:12px"></svg>
+    <div class="readout" id="gOut"></div>
+  </div>
+  <div class="card">
+    <span class="step-tag">더 알아보기</span>
+    <h3>🚀 우주 정거장에서의 생활 (교과서 159쪽)</h3>
+    <p>우주 정거장은 중력이 없는 곳이 아니에요. 중력은 있지만, 중력과 크기가 같고 방향이 반대인 힘이 함께 작용해서 중력의 효과를 느낄 수 없는 <b>무중력 상태</b>예요. 그래서 우주인은 잘린 머리카락이 떠다니지 않도록 빨아들이는 이발기를 써요.</p>
+  </div>
+  <div class="card quiz" data-quiz="2"><span class="step-tag">STEP 4 확인 문제</span></div>
+</section>
+
+<!-- ============ 1-03 탄성력 ============ -->
+<section class="lesson" data-title="03 탄성력" data-part="">
+  <div class="crumb">1. 여러 가지 힘 › 03 · 교과서 160~163쪽</div>
+  <h2>탄성력</h2>
+  <p class="goal">학습 목표: 탄성력의 특징을 방향과 크기로 설명하고, 용수철의 탄성력을 측정할 수 있다.</p>
+  <div class="card">
+    <span class="step-tag">STEP 1 개념</span>
+    <h3>원래 모양으로 되돌아가려는 힘</h3>
+    <p>용수철 운동 기구를 움켜쥐었다 놓으면 원래 모양으로 되돌아가면서 손을 밀어내요.</p>
+    <div class="key"><b>탄성</b>: 변형된 물체가 원래 모양으로 되돌아가는 성질<br><b>탄성력</b>: 변형된 물체가 <b>원래 모양으로 돌아가려고 하는 힘</b><br><b>탄성력의 방향</b>: 원래 모양으로 되돌아가려는 방향 (물체를 변형시킨 힘과 반대 방향)</div>
+    <div class="grid2">
+      <div class="ex"><b>↔️ 잡아당기면</b>고무 띠를 바깥쪽으로 당기면 탄성력은 안쪽(원래 모양 쪽)으로 작용해요.</div>
+      <div class="ex"><b>➡️⬅️ 누르면</b>용수철을 누르면 탄성력은 누르는 힘과 반대쪽으로 밀어내요.</div>
+    </div>
+  </div>
+  <div class="card">
+    <span class="step-tag">STEP 2 개념</span>
+    <h3>탄성력의 크기</h3>
+    <p>고무 띠를 당긴 채로 멈춰 있으면, 고무 띠에 작용하는 힘과 탄성력은 크기가 같고 방향이 반대라서 <b>힘의 평형</b>을 이뤄요.</p>
+    <div class="formula">탄성력의 크기 = 고무 띠(용수철)에 작용하는 힘의 크기</div>
+    <div class="key">탄성력의 크기는 물체가 <b>변형된 길이에 비례</b>한다.<br>예) 2 cm 늘어날 때 1 N → 4 cm면 2 N, 6 cm면 3 N</div>
+    <p>이 성질을 이용해 힘의 크기를 재는 장치가 <b>용수철저울</b>, <b>체중계</b>예요.</p>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 3 실험해 보기</span>
+    <h3>🔬 용수철이 늘어난 길이와 탄성력 (교과서 162~163쪽)</h3>
+    <svg id="spSvg" viewBox="0 0 600 320"></svg>
+    <div class="controls">
+      <label>매단 추 (한 개 1 N) <input type="range" id="spN" min="0" max="5" value="1"> <span id="spNv">1개</span></label>
+    </div>
+    <div class="readout" id="spOut"></div>
+    <p class="tip">이 용수철은 교과서 그림처럼 2 cm 늘어날 때 탄성력이 1 N이에요. 그래프 모양을 살펴보세요.</p>
+  </div>
+  <div class="card quiz" data-quiz="3"><span class="step-tag">STEP 4 확인 문제</span></div>
+</section>
+
+<!-- ============ 1-04 마찰력 ============ -->
+<section class="lesson" data-title="04 마찰력" data-part="">
+  <div class="crumb">1. 여러 가지 힘 › 04 · 교과서 164~165쪽</div>
+  <h2>마찰력</h2>
+  <p class="goal">학습 목표: 마찰력을 이해하고, 마찰력의 특징을 방향과 크기로 설명할 수 있다.</p>
+  <div class="card">
+    <span class="step-tag">STEP 1 개념</span>
+    <h3>운동을 방해하는 힘</h3>
+    <p>바닥에 놓인 나무 도막을 작은 힘으로 당기면 움직이지 않아요. 나무 도막과 바닥면 사이에 운동을 방해하는 힘이 작용하기 때문이에요.</p>
+    <div class="key"><b>마찰력</b>: 두 물체의 접촉면 사이에서 물체의 <b>운동을 방해하는 힘</b><br><b>마찰력의 방향</b>: 물체의 <b>운동 방향과 반대</b></div>
+    <table>
+      <tr><th>마찰력의 크기가 커지는 경우</th><th>예</th></tr>
+      <tr><td>물체의 무게가 <b>무거울수록</b></td><td>가벼운 의자보다 무거운 의자를 밀 때 힘이 더 든다</td></tr>
+      <tr><td>접촉면이 <b>거칠수록</b></td><td>매끈한 면보다 거친 면에서 끌기가 더 힘들다</td></tr>
+    </table>
+    <div class="wonder">🥌 <b>컬링화</b>의 양쪽 바닥은 모양과 재질이 달라요. 한쪽은 마찰력이 커서 버티고, 다른 쪽은 마찰력이 작아서 미끄러지도록 만든 거예요.</div>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 2 실험해 보기</span>
+    <h3>🔬 운동을 방해하는 힘 알아보기 (교과서 164쪽)</h3>
+    <svg id="frSvg" viewBox="0 0 600 220"></svg>
+    <div class="controls">
+      <label>바닥면 <span class="seg" id="frSurf"><button data-s="0.2">유리판</button><button data-s="0.35" class="on">실험대(나무)</button><button data-s="0.7">사포</button></span></label>
+      <label>나무 도막 개수 <input type="range" id="frN" min="1" max="3" value="1"> <span id="frNv">1개</span></label>
+    </div>
+    <div class="readout" id="frOut"></div>
+    <p class="tip">나무 도막이 움직이기 시작할 때 용수철저울의 눈금 = 마찰력의 크기 (도막 1개의 무게 = 2 N으로 가정)</p>
+  </div>
+  <div class="card quiz" data-quiz="4"><span class="step-tag">STEP 3 확인 문제</span></div>
+</section>
+
+<!-- ============ 1-05 부력 ============ -->
+<section class="lesson" data-title="05 부력" data-part="">
+  <div class="crumb">1. 여러 가지 힘 › 05 · 교과서 166~169쪽</div>
+  <h2>부력</h2>
+  <p class="goal">학습 목표: 부력의 특징을 방향과 크기로 설명하고, 물속에서의 부력을 측정할 수 있다.</p>
+  <div class="card">
+    <span class="step-tag">STEP 1 개념</span>
+    <h3>떠오르게 하는 힘</h3>
+    <p>막대 양쪽에 추를 매달아 수평을 맞춘 뒤 한쪽 추만 물에 잠기게 하면, 막대가 물을 붓지 않은 쪽으로 기울어요. 물속의 추를 위로 밀어 올리는 힘이 생겼기 때문이에요.</p>
+    <div class="key"><b>부력</b>: 액체나 기체 속에 있는 물체를 그 액체나 기체가 <b>위쪽으로 밀어 올리는 힘</b><br><b>부력의 방향</b>: <b>중력과 반대 방향(위쪽)</b></div>
+    <div class="grid2">
+      <div class="ex"><b>🚢 크고 무거운 배가 뜨는 까닭</b>물이 배에 작용하는 부력 때문</div>
+      <div class="ex"><b>🎈 헬륨 풍선이 올라가는 까닭</b>공기가 풍선에 작용하는 부력 때문</div>
+    </div>
+  </div>
+  <div class="card">
+    <span class="step-tag">STEP 2 개념</span>
+    <h3>부력의 크기</h3>
+    <div class="formula">부력의 크기 = 물에 잠기기 전 힘 센서(용수철저울) 값 − 물에 잠겼을 때의 값</div>
+    <div class="key">물체가 물에 <b>잠긴 부분의 부피가 클수록</b> 부력이 커진다.</div>
+    <p>물 위에 떠서 정지해 있는 배는 <b>중력과 부력이 평형</b>을 이뤄요. 화물을 가득 실은 배는 중력이 더 크므로 물속에 더 많이 잠겨서 더 큰 부력을 받아요.</p>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 3 실험해 보기</span>
+    <h3>🔬 물속에서 부력 측정하기 (교과서 168~169쪽)</h3>
+    <svg id="bySvg" viewBox="0 0 600 340"></svg>
+    <div class="controls">
+      <label>물에 잠긴 추 (100 g 추 4개) <input type="range" id="byN" min="0" max="4" value="0"> <span id="byNv">0개</span></label>
+    </div>
+    <div class="readout" id="byOut"></div>
+    <p class="tip">힘 센서 값은 교과서 그림 14의 측정값(3.9 N → 3.7 N → 3.5 N)을 따랐어요.</p>
+  </div>
+  <div class="card quiz" data-quiz="5"><span class="step-tag">STEP 4 확인 문제</span></div>
+</section>
+
+<!-- ============ 2-01 알짜힘 ============ -->
+<section class="lesson" data-title="01 알짜힘" data-part="2. 힘과 우리 생활">
+  <div class="crumb">2. 힘과 우리 생활 › 01 · 교과서 174~175쪽</div>
+  <h2>알짜힘</h2>
+  <p class="goal">학습 목표: 알짜힘이 0일 때 물체의 운동 상태가 변하지 않음을 설명할 수 있다.</p>
+  <div class="card">
+    <span class="step-tag">STEP 1 개념</span>
+    <h3>물체에 여러 가지 힘이 작용하면?</h3>
+    <p>나무에 매달린 사과에도, 바닥에 떨어진 사과에도 중력 말고 다른 힘이 동시에 작용해요.</p>
+    <div class="key"><b>알짜힘</b>: 한 물체에 여러 힘이 동시에 작용할 때, 이 모든 힘을 <b>합한 힘</b></div>
+    <div class="grid3">
+      <div class="ex"><b>👉👉 같은 방향</b>크기 = 두 힘의 <b>합</b><br>방향 = 두 힘의 방향<div class="formula">6 N + 3 N = 9 N</div></div>
+      <div class="ex"><b>👉👈 반대 방향</b>크기 = 두 힘의 <b>차</b><br>방향 = 더 큰 힘의 방향<div class="formula">6 N − 3 N = 3 N</div></div>
+      <div class="ex"><b>⚖️ 크기 같고 반대</b>알짜힘 = <b>0</b><br>(힘의 평형)<div class="formula">3 N − 3 N = 0</div></div>
+    </div>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 2 실험해 보기</span>
+    <h3>🔬 알짜힘 계산기</h3>
+    <svg id="netSvg" viewBox="0 0 600 240"></svg>
+    <div class="controls">
+      <label><span class="badge b1">힘1</span> <input type="range" id="f1" min="0" max="10" value="6"> <span id="f1v">6 N</span></label>
+      <label><span class="badge b2">힘2</span> <input type="range" id="f2" min="0" max="10" value="3"> <span id="f2v">3 N</span></label>
+      <label>힘2 방향 <span class="seg" id="f2dir"><button data-d="opp" class="on">반대 방향</button><button data-d="same">같은 방향</button></span></label>
+    </div>
+    <div class="readout" id="netOut"></div>
+    <p class="tip">도전! 알짜힘이 0이 되도록 만들어 보세요.</p>
+  </div>
+  <div class="card">
+    <span class="step-tag">STEP 3 개념</span>
+    <h3>알짜힘이 0일 때의 운동</h3>
+    <div class="key">알짜힘이 0이면 물체는 힘의 평형 상태에 있어서 <b>속력과 운동 방향이 변하지 않는다</b>.<br>· 정지해 있는 물체 → 계속 <b>정지</b> (예: 책상 위에 놓인 책)<br>· 운동하는 물체 → <b>일정한 방향과 속력</b>으로 운동 (예: 무빙워크 위에 서 있는 사람)</div>
+    <p class="tip">💡 상자를 300 N으로 밀었는데 움직이지 않았다면? 마찰력도 300 N이고 알짜힘은 0이에요.</p>
+  </div>
+  <div class="card quiz" data-quiz="6"><span class="step-tag">STEP 4 확인 문제</span></div>
+</section>
+
+<!-- ============ 2-02 힘과 운동 ============ -->
+<section class="lesson" data-title="02 힘과 운동" data-part="">
+  <div class="crumb">2. 힘과 우리 생활 › 02 · 교과서 176~179쪽</div>
+  <h2>힘과 운동</h2>
+  <p class="goal">학습 목표: 알짜힘이 0이 아닐 때 물체의 운동 상태가 변함을 알고, 그 예를 조사하여 분류할 수 있다.</p>
+  <div class="card">
+    <span class="step-tag">STEP 1 개념</span>
+    <h3>알짜힘이 0이 아니면 운동 상태가 변해요</h3>
+    <p>타자가 야구방망이로 공을 치면 공의 속력과 운동 방향이 모두 변해요. 알짜힘의 <b>방향</b>이 운동 방향과 어떤 관계인지에 따라 변하는 것이 달라요.</p>
+    <div class="grid4">
+      <div class="ex"><b>➡️➡️ 같은 방향</b>속력이 점점 <b>증가</b></div>
+      <div class="ex"><b>➡️⬅️ 반대 방향</b>속력이 점점 <b>감소</b></div>
+      <div class="ex"><b>➡️⬆️ 항상 수직</b><b>운동 방향만</b> 변함 (원운동)</div>
+      <div class="ex"><b>➡️↘️ 비스듬</b><b>속력과 운동 방향</b> 모두 변함</div>
+    </div>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 2 실험해 보기</span>
+    <h3>🔬 빨대 축구 시뮬레이터 (교과서 176쪽)</h3>
+    <svg id="mvSvg" viewBox="0 0 600 300"></svg>
+    <div class="controls">
+      <label>알짜힘의 방향 <span class="seg" id="mvDir">
+        <button data-m="zero">알짜힘 0</button><button data-m="same" class="on">운동 방향과 같게</button><button data-m="opp">반대로</button><button data-m="perp">항상 수직</button><button data-m="obl">비스듬하게</button></span></label>
+      <button class="btn primary" id="mvBtn">▶ 탁구공 굴리기</button>
+    </div>
+    <div class="readout" id="mvOut">알짜힘의 방향을 고르고 ‘탁구공 굴리기’를 눌러 보세요.</div>
+    <p class="tip">흐린 공은 일정한 시간 간격으로 찍은 위치예요. 간격이 넓어지면 속력이 빨라진 거예요. 보라색 화살표가 알짜힘이에요.</p>
+  </div>
+  <div class="card">
+    <span class="step-tag">STEP 3 정리</span>
+    <h3>운동은 어떻게 분류할까? (교과서 179쪽)</h3>
+    <table>
+      <tr><th colspan="3">알짜힘이 0이 아닐 때</th><th>알짜힘이 0일 때</th></tr>
+      <tr><td>속력만 변하는 운동</td><td>운동 방향만 변하는 운동</td><td>속력과 운동 방향이<br>모두 변하는 운동</td><td>속력과 운동 방향이<br>일정한 운동 · 정지</td></tr>
+      <tr><td>🎢 낙하 놀이 기구</td><td>🎡 대관람차</td><td>🪢 그네</td><td>🚶 무빙워크 · 📕 책상 위에 놓인 책</td></tr>
+    </table>
+  </div>
+  <div class="card quiz" data-quiz="7"><span class="step-tag">STEP 4 확인 문제</span></div>
+</section>
+
+<!-- ============ 2-03 여러 가지 힘의 이용 ============ -->
+<section class="lesson" data-title="03 여러 가지 힘의 이용" data-part="">
+  <div class="crumb">2. 힘과 우리 생활 › 03 · 교과서 180~183쪽</div>
+  <h2>여러 가지 힘의 이용</h2>
+  <p class="goal">학습 목표: 다양한 사례에서 작용하는 힘과 힘의 평형 관계를 설명하고, 힘의 특징을 이용한 기구나 장치를 설계할 수 있다.</p>
+  <div class="card">
+    <span class="step-tag">STEP 1 개념</span>
+    <h3>일상생활에서 평형을 이루는 힘</h3>
+    <div class="grid3">
+      <div class="ex"><b>⏰ 책상 위의 시계</b>아래로 <b>중력</b> ↔ 위로 책상이 <b>떠받치는 힘</b></div>
+      <div class="ex"><b>🛟 물에 뜬 튜브</b>아래로 <b>중력</b> ↔ 위로 <b>부력</b></div>
+      <div class="ex"><b>🚪 문 고정 장치</b>문이 <b>닫히려는 힘</b> ↔ <b>마찰력</b></div>
+    </div>
+    <p class="tip">💡 처음 질문의 답! 풍선놀이틀에는 중력과 부력이 평형을 이뤄서 물 위에 떠요.</p>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 2 실험해 보기</span>
+    <h3>🔬 장난감 잠수함 (교과서 181쪽)</h3>
+    <svg id="subSvg" viewBox="0 0 600 300"></svg>
+    <div class="controls">
+      <label>풍선에 넣은 공기 <input type="range" id="subP" min="0" max="100" value="0" step="10"> <span id="subPv">0%</span></label>
+    </div>
+    <div class="readout" id="subOut"></div>
+    <p class="tip">물이 가득 찬 집기병 속 풍선에 공기를 넣으면 풍선이 부풀면서 물이 밖으로 빠져나가요.</p>
+  </div>
+  <div class="card sim">
+    <span class="step-tag">STEP 3 분류 게임</span>
+    <h3>🎯 어떤 힘을 이용했을까?</h3>
+    <div id="useGame"></div>
+    <div class="readout" id="useOut">0 / 0 맞힘</div>
+  </div>
+  <div class="card quiz" data-quiz="8"><span class="step-tag">STEP 4 확인 문제</span></div>
+</section>
+
+<!-- ============ 종합 ============ -->
+<section class="lesson" data-title="🏆 종합 평가" data-part="마무리">
+  <div class="crumb">Ⅴ. 힘의 작용 › 대단원 마무리 · 교과서 186~189쪽</div>
+  <h2>🏆 종합 평가</h2>
+  <p class="goal">단원 전체를 정리해요. 12문제를 모두 풀면 점수와 수료증이 나와요.</p>
+  <div class="card">
+    <h3>📝 한눈에 정리</h3>
+    <table>
+      <tr><th>힘</th><th>방향</th><th>크기</th></tr>
+      <tr><td>중력</td><td>지구 중심 방향</td><td>무게 = 중력의 크기 (1 kg → 약 9.8 N, 달에서 약 1/6)</td></tr>
+      <tr><td>탄성력</td><td>원래 모양으로 되돌아가려는 방향</td><td>변형된 길이에 비례</td></tr>
+      <tr><td>마찰력</td><td>운동 방향과 반대</td><td>무게가 무거울수록, 접촉면이 거칠수록 큼</td></tr>
+      <tr><td>부력</td><td>중력과 반대(위쪽)</td><td>잠긴 부피가 클수록 큼</td></tr>
+    </table>
+    <table>
+      <tr><th>알짜힘</th><th>운동 상태</th></tr>
+      <tr><td>0</td><td>속력과 운동 방향이 변하지 않음 (정지 또는 일정한 운동)</td></tr>
+      <tr><td>운동 방향과 나란함</td><td>속력만 변함</td></tr>
+      <tr><td>운동 방향과 항상 수직</td><td>운동 방향만 변함</td></tr>
+      <tr><td>운동 방향과 비스듬함</td><td>속력과 운동 방향이 모두 변함</td></tr>
+    </table>
+  </div>
+  <div class="card quiz" data-quiz="final"></div>
+  <div class="score" id="finalScore"></div>
+  <div id="cert"></div>
+  <div style="text-align:center;margin-top:14px"><button class="btn ghost" id="resetBtn">↺ 진도 초기화 (다음 학생)</button></div>
+</section>
+
+<div class="navbtns">
+  <button class="btn ghost" id="prevBtn">← 이전</button>
+  <button class="btn primary" id="nextBtn">다음 →</button>
+</div>
+</main>
+
+<div id="modal" class="modal"><div class="modal-box">
+  <div class="big" id="mIcon"></div><h3 id="mTitle"></h3><p id="mDesc"></p>
+  <button class="btn primary" id="mOk">좋아요! 🙌</button></div></div>
+<div id="badgeModal" class="modal"><div class="modal-box wide">
+  <h3>🎖 내 배지함</h3><div id="badgeGrid" class="bgrid"></div>
+  <button class="btn ghost" id="bClose">닫기</button></div></div>
+<div id="resetModal" class="modal"><div class="modal-box rbox">
+  <div class="big" style="text-align:center;animation:none">↺</div>
+  <h3 style="text-align:center">처음부터 다시 할까요?</h3>
+  <p id="rWho" style="text-align:center;color:var(--sub);margin:4px 0"></p>
+  <ul>
+    <li>이 컴퓨터에 저장된 <b>진도, 경험치, 배지, 별</b>이 모두 지워져요.</li>
+    <li>반·번호·이름을 다시 적을 수 있어요. (다른 학생이 쓸 때도 이 버튼을 눌러요)</li>
+    <li id="rSheet">선생님 구글 시트에 이미 보낸 기록은 지워지지 않아요.</li>
+  </ul>
+  <div class="rbtns"><button class="btn ghost" id="rCancel">취소</button><button class="btn danger" id="rOk">초기화하기</button></div>
+</div></div>
+<div id="toasts"></div>
+
+<script>
+/* =====================================================================
+   ☁️ 구글 시트 연동 설정 (선생님이 바꾸는 곳)
+   - SHEET_URL : Apps Script를 웹 앱으로 배포한 뒤 받은 주소 (…/exec)
+   - SHEET_TOKEN : Code.gs의 TOKEN과 똑같이
+   SHEET_URL을 비워 두면 기록을 보내지 않고 이 컴퓨터에만 저장해요.
+   ===================================================================== */
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxRY_mCKVRBK5DjcFg5c7GGQgr2tcFykdZzOotAW5Gd6B93idbpuIDZrKUuHRX4GiwJ/exec";
+const SHEET_TOKEN = "force-class";
+const STEP_NAMES = ["시작하기","1-01 힘의 표현과 평형","1-02 중력","1-03 탄성력","1-04 마찰력","1-05 부력","2-01 알짜힘","2-02 힘과 운동","2-03 힘의 이용","종합 평가"];
+
+/* ================= 문제 그림 도우미 (SVG) ================= */
+const FC={f:"#2f6fde",g:"#e0561f",e:"#1f9d6b",r:"#d64545",n:"#7a3fd1",k:"#1f2933",s:"#52606d",w:"#bfe3f7",y:"#8a6d3b"};
+function S(h,inner,w){w=w||560;return `<svg class="qfig" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;}
+function T(x,y,s,o){o=o||{};return `<text x="${x}" y="${y}" font-size="${o.fs||14}" fill="${o.c||FC.k}" text-anchor="${o.a||"middle"}" font-weight="${o.b?"700":"400"}">${s}</text>`;}
+function A(x1,y1,x2,y2,c,o){o=o||{};c=c||FC.f;const w=o.w||5,dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,h=o.h||13,bx=x2-ux*h,by=y2-uy*h,px=-uy*h*0.55,py=ux*h*0.55;
+  return `<line x1="${x1}" y1="${y1}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"${o.d?' stroke-dasharray="7 5"':""}/><polygon points="${x2},${y2} ${(bx+px).toFixed(1)},${(by+py).toFixed(1)} ${(bx-px).toFixed(1)},${(by-py).toFixed(1)}" fill="${c}"/>`;}
+function R(x,y,w,h,f,s,rx){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx==null?4:rx}" fill="${f||"#f4d9a6"}" stroke="${s||"#8a5a1f"}" stroke-width="2"/>`;}
+function C(cx,cy,r,f,s,sw){return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f||"#fff"}" stroke="${s||FC.k}" stroke-width="${sw==null?2:sw}"/>`;}
+function L(x1,y1,x2,y2,c,w,d){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c||FC.k}" stroke-width="${w||2}"${d?' stroke-dasharray="5 4"':""} stroke-linecap="round"/>`;}
+function P(d,f,s,w){return `<path d="${d}" fill="${f||"none"}" stroke="${s||FC.k}" stroke-width="${w||2}" stroke-linejoin="round" stroke-linecap="round"/>`;}
+function GND(y,x1,x2,f){let s=`<rect x="${x1}" y="${y}" width="${x2-x1}" height="12" fill="${f||"#e6d5b0"}"/>`+L(x1,y,x2,y,FC.y,2);for(let x=x1+6;x<x2;x+=14)s+=L(x,y+12,x+8,y+3,"#c9b48a",1.5);return s;}
+function WALL(x,y1,y2){let s=`<rect x="${x-14}" y="${y1}" width="14" height="${y2-y1}" fill="#d3d8de"/>`+L(x,y1,x,y2,"#6b7785",2.5);for(let y=y1+4;y<y2;y+=12)s+=L(x-14,y+8,x-2,y,"#9aa5b1",1.5);return s;}
+function CEIL(x1,x2,y){let s=`<rect x="${x1}" y="${y-12}" width="${x2-x1}" height="12" fill="#d3d8de"/>`+L(x1,y,x2,y,"#6b7785",2.5);return s;}
+function SP(x1,y1,x2,y2,n,c){n=n||10;const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len,px=-uy,py=ux,lead=Math.min(10,len*0.08),body=len-2*lead;
+  let d=`M${x1},${y1} L${(x1+ux*lead).toFixed(1)},${(y1+uy*lead).toFixed(1)} `;
+  for(let i=1;i<=n;i++){const t=lead+body*(i-0.5)/n,sd=i%2?9:-9;d+=`L${(x1+ux*t+px*sd).toFixed(1)},${(y1+uy*t+py*sd).toFixed(1)} `;}
+  d+=`L${(x2-ux*lead).toFixed(1)},${(y2-uy*lead).toFixed(1)} L${x2},${y2}`;return P(d,"none",c||"#555",2.5);}
+function WAT(x,y,w,h){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${FC.w}" opacity=".85"/>`+L(x,y,x+w,y,"#5aa9e6",2);}
+function BEAKER(x,y,w,h,lvl){return (lvl!=null?WAT(x+2,y+h-lvl,w-4,lvl-2):"")+P(`M${x},${y} V${y+h} H${x+w} V${y}`,"none","#7a8a99",3);}
+function GRID(x,y,cols,rows,u){let s="";for(let i=0;i<=cols;i++)s+=L(x+i*u,y,x+i*u,y+rows*u,"#e3e8f0",1);for(let j=0;j<=rows;j++)s+=L(x,y+j*u,x+cols*u,y+j*u,"#e3e8f0",1);return s;}
+function VSCALE(x,y,val){return R(x-28,y,56,58,"#eef2f7","#52606d",6)+R(x-24,y+9,48,18,"#bde0fe","#52606d",3)+T(x,y+23,val,{fs:12,b:1})+L(x,y+58,x,y+66,"#444",2);}
+function HSCALE(x,y,val,w){w=w||58;return R(x,y-11,w,22,"#eef2f7","#52606d",5)+T(x+w/2,y+5,val,{fs:12,b:1});}
+function SENSOR(x,y,val){return R(x-32,y,64,36,"#2b2d42","#2b2d42",7)+R(x-25,y+7,50,20,"#bde0fe","#bde0fe",3)+T(x,y+22,val,{fs:13,b:1});}
+function lab(x,y,s,fs){return T(x,y,s,{fs:fs||15,b:1,c:FC.s});}
+function BLOCK(x,y,w,h,t){return R(x,y,w,h,"#d9a35b","#8a5a1f",3)+(t?T(x+w/2,y+h/2+5,t,{fs:12,c:"#5a3a12"}):"");}
+function CART(x,y,w){w=w||90;return R(x,y,w,46,"#f4d9a6","#b58340",6)+C(x+20,y+54,9,"#555","#333")+C(x+w-20,y+54,9,"#555","#333");}
+function PERSON(x,y,s,push){s=s||1;const arm=push?`<line x1="0" y1="-42" x2="22" y2="-38"/><line x1="0" y1="-38" x2="22" y2="-30"/>`:`<line x1="0" y1="-42" x2="14" y2="-26"/><line x1="0" y1="-42" x2="-14" y2="-26"/>`;
+  return `<g transform="translate(${x},${y}) scale(${s})" stroke="${FC.k}" stroke-width="3" fill="none" stroke-linecap="round"><circle cx="0" cy="-60" r="10" fill="#ffe0bd"/><line x1="0" y1="-50" x2="0" y2="-20"/><line x1="0" y1="-20" x2="-10" y2="0"/><line x1="0" y1="-20" x2="10" y2="0"/>${arm}</g>`;}
+function EARTH(cx,cy,r){return C(cx,cy,r,"#9ecbf0","#3b82c4",2.5)+P(`M${cx-r*0.55},${cy-r*0.35} q${r*0.25},${-r*0.3} ${r*0.5},${-r*0.05} t${r*0.2},${r*0.35} q${-r*0.3},${r*0.3} ${-r*0.6},${r*0.05}z`,"#8fd19e","#5aa36b",1.5)+P(`M${cx+r*0.1},${cy+r*0.2} q${r*0.3},${-r*0.1} ${r*0.45},${r*0.15} t${-r*0.1},${r*0.35} q${-r*0.25},${0} ${-r*0.35},${-r*0.5}z`,"#8fd19e","#5aa36b",1.5);}
+function BALL(cx,cy,r,f){return C(cx,cy,r,f||"#fff","#333",2);}
+function DOTS(pts,r,f){return pts.map(p=>C(p[0],p[1],r||7,f||"#f2a65a","#b5651d",1.5)).join("");}
+function APPLE(cx,cy,r){return C(cx,cy,r,"#e5484d","#a3262a",2)+L(cx,cy-r,cx+3,cy-r-8,"#6b4a1f",2.5)+P(`M${cx+3},${cy-r-4} q8,-8 14,-2 q-8,6 -14,2z`,"#5aa36b","#3d7a4c",1);}
+function BAR(x,y){return C(x,y,8,"#555","#333");}
+
+/* 마찰력 실험 세 줄: rows=[{t:"(가)",surf:"나무판",n:1,c:"#e7c99a"},…] */
+function FRROWS(rows){let s="";rows.forEach((r,i)=>{const y=20+i*72;
+  s+=lab(26,y+40,r.t)+`<rect x="60" y="${y+46}" width="380" height="12" fill="${r.c}" stroke="#8a6d3b" stroke-width="1.5"/>`;
+  if(r.dots) for(let x=64;x<440;x+=7) s+=C(x,y+47,1.6,"#7d6d55","#7d6d55",0);
+  for(let k=0;k<r.n;k++) s+=BLOCK(170,y+46-(k+1)*20,70,20);
+  s+=L(240,y+36,300,y+36,"#444",2)+HSCALE(300,y+36,"?")+A(358,y+36,410,y+36,FC.s,{w:3,h:10});
+  s+=T(500,y+56,`${r.surf} · 도막 ${r.n}개`,{fs:12,c:FC.s});});return s;}
+
+/* ================= 문제 데이터 (그림 문제) =================
+   q: 문제, f: 문제 그림, o: 보기, a: 정답 번호(0부터), e: 해설, ef: 해설 그림(맞힌 뒤 표시) */
+const QUIZ = {
+  1:[
+    {q:"그림 (가)~(다)는 일상생활에서 물체에 힘이 작용하는 모습이다. (나)처럼 손으로 물풍선을 누를 때 물풍선에 나타나는 변화로 가장 알맞은 것은?",
+     f:()=>S(175,
+       P("M40,95 L135,70 L80,92 Z","#fff","#555",2)+P("M80,92 L135,70 L95,105 Z","#e9eef5","#555",2)+A(140,74,175,64,FC.s,{w:3,h:9})+T(95,160,"(가) 종이비행기를 날린다",{fs:13})+
+       `<ellipse cx="280" cy="112" rx="52" ry="26" fill="#7cc4f2" stroke="#2b7bb9" stroke-width="2"/>`+R(255,58,50,22,"#ffe0bd","#c9a27c",10)+A(280,30,280,56,FC.f,{w:4,h:10})+T(280,160,"(나) 물풍선을 누른다",{fs:13})+
+       `<ellipse cx="455" cy="80" rx="30" ry="38" fill="none" stroke="#444" stroke-width="3"/>`+L(455,118,455,150,"#444",5)+BALL(505,78,13,"#d9ef5a")+T(470,160,"(다) 테니스공을 친다",{fs:13})),
+     o:["모양이 변한다","질량이 변한다","운동 방향만 변한다","아무 변화도 없다"],a:0,
+     e:"(나)에서 물풍선을 누르면 물풍선이 찌그러지며 모양이 변해요. (가)는 멈춰 있던 종이비행기의 속력이 변하고, (다)는 테니스공의 모양·속력·운동 방향이 모두 변해요. 과학에서 힘은 물체의 모양이나 운동 상태(속력, 운동 방향)를 변화시키는 원인이에요."},
+    {q:"그림은 모눈 한 칸을 1 N으로 정하고, 수레에 작용하는 힘을 화살표로 나타낸 것이다. 이 힘에 대한 설명으로 옳은 것은?",
+     f:()=>S(200,GRID(20,25,17,5,30)+CART(140,92,90)+A(230,115,350,115,FC.f,{w:5})+T(470,190,"모눈 한 칸 = 1 N",{fs:13,c:FC.s})),
+     o:["힘의 크기는 4 N이고, 힘의 방향은 오른쪽이다","힘의 크기는 2 N이고, 힘의 방향은 오른쪽이다","화살표의 끝점이 힘의 작용점이다","힘의 크기는 4 N이고, 힘의 방향은 왼쪽이다"],a:0,
+     e:"화살표 길이가 모눈 4칸이므로 힘의 크기는 4 N, 화살표가 오른쪽을 향하므로 방향은 오른쪽이에요. 힘의 작용점은 화살표의 ‘시작점’이에요."},
+    {q:"그림 (가)와 (나)는 축구공의 서로 다른 곳을 같은 크기, 같은 방향의 힘으로 차는 모습이다. 두 경우 공이 날아가는 모습이 서로 다른 까닭으로 가장 알맞은 것은?",
+     f:()=>S(190,BALL(160,95,34)+P("M160,77 l14,10 -5,16 -18,0 -5,-16z","#333","#333",1)+A(62,95,124,95,FC.f)+lab(160,170,"(가)")+
+       BALL(420,95,34)+P("M420,77 l14,10 -5,16 -18,0 -5,-16z","#333","#333",1)+A(330,120,394,120,FC.f)+lab(420,170,"(나)")+
+       T(280,24,"두 화살표의 길이와 방향은 같아요",{fs:12,c:FC.s})),
+     o:["힘의 작용점이 다르기 때문","힘의 크기가 다르기 때문","힘의 방향이 다르기 때문","공의 질량이 다르기 때문"],a:0,
+     e:"(가)는 공의 가운데를, (나)는 공의 아래쪽을 찼어요. 힘의 크기와 방향이 같아도 힘을 주는 지점(작용점)이 다르면 결과가 달라져요. 그래서 힘은 크기·방향·작용점을 함께 나타내요."},
+    {q:"그림 (가)~(라)는 한 물체에 두 힘이 작용하는 모습이다. 두 힘이 평형을 이루는 것은? (화살표 옆 숫자는 힘의 크기)",
+     f:()=>{const box=(cx)=>R(cx-15,75,30,30,"#dfe7f2","#6b7f99",4);let s="";
+       s+=box(70)+A(85,84,130,84,FC.f,{w:4,h:10})+A(85,98,130,98,FC.g,{w:4,h:10})+T(110,74,"3N",{fs:12,c:FC.f})+T(110,120,"3N",{fs:12,c:FC.g})+lab(70,165,"(가)");
+       s+=box(210)+A(225,90,270,90,FC.f,{w:4,h:10})+A(195,90,150,90,FC.g,{w:4,h:10})+T(250,80,"3N",{fs:12,c:FC.f})+T(170,80,"3N",{fs:12,c:FC.g})+lab(210,165,"(나)");
+       s+=box(350)+A(365,90,410,90,FC.f,{w:4,h:10})+A(335,90,305,90,FC.g,{w:4,h:10})+T(390,80,"3N",{fs:12,c:FC.f})+T(318,80,"2N",{fs:12,c:FC.g})+lab(350,165,"(다)");
+       s+=box(490)+A(505,79,550,79,FC.f,{w:4,h:10})+A(475,101,430,101,FC.g,{w:4,h:10})+T(530,70,"3N",{fs:12,c:FC.f})+T(450,124,"3N",{fs:12,c:FC.g})+lab(490,165,"(라)");
+       return S(180,s);},
+     o:["(가)","(나)","(다)","(라)"],a:1,
+     e:"(나)는 두 힘의 크기가 같고(3 N), 방향이 반대이며, 같은 직선 위에 있어서 평형을 이뤄요. (가)는 방향이 같고, (다)는 크기가 다르고, (라)는 같은 직선 위에 있지 않아서 평형이 아니에요.",
+     ef:()=>S(150,L(90,75,470,75,"#9aa5b1",1.5,true)+R(265,60,30,30,"#dfe7f2","#6b7f99",4)+A(295,75,370,75,FC.f)+A(265,75,190,75,FC.g)+T(335,62,"3 N",{c:FC.f,b:1})+T(225,62,"3 N",{c:FC.g,b:1})+
+       T(280,120,"✔ 크기가 같다  ✔ 방향이 반대  ✔ 같은 직선 위 → 힘의 평형",{fs:14,c:FC.e,b:1}))}
+  ],
+  2:[
+    {q:"그림과 같이 지구 위 A, B, C 세 곳에서 잡고 있던 공을 가만히 놓았다. 공이 떨어지는 방향에 대한 설명으로 옳은 것은?",
+     f:()=>S(230,EARTH(280,118,72)+BALL(280,30,9,"#ffd166")+T(298,28,"A",{b:1,a:"start"})+BALL(366,150,9,"#ffd166")+T(384,155,"B",{b:1,a:"start"})+BALL(196,86,9,"#ffd166")+T(178,82,"C",{b:1,a:"end"})+
+       T(280,222,"(공은 지구 표면 가까이에 있어요)",{fs:12,c:FC.s})),
+     o:["세 공 모두 지구 중심 방향으로 떨어진다","세 공 모두 그림의 아래쪽으로 떨어진다","세 공 모두 북쪽으로 떨어진다","공이 있는 곳에 따라 지구 바깥쪽으로 떨어진다"],a:0,
+     e:"중력은 지구가 물체를 지구 중심 방향으로 끌어당기는 힘이에요. 그래서 A, B, C 어디에서 놓아도 공은 그곳에서 지구 중심을 향해 떨어져요.",
+     ef:()=>S(230,EARTH(280,118,72)+L(280,118,280,118,FC.k)+C(280,118,4,FC.k,FC.k)+BALL(280,30,9,"#ffd166")+A(280,40,280,72,FC.g)+BALL(366,150,9,"#ffd166")+A(357,147,327,135,FC.g)+BALL(196,86,9,"#ffd166")+A(205,90,234,101,FC.g)+T(280,222,"모두 지구 중심을 향해요",{fs:13,c:FC.g,b:1}))},
+    {q:"지구에서 체중계로 잰 몸무게가 600 N인 사람이 달에 갔다. 달의 중력은 지구의 약 1/6이다. 같은 사람이 달에서 몸무게를 재면 약 얼마일까?",
+     f:()=>S(190,EARTH(70,70,40)+PERSON(170,140,1)+R(140,140,60,14,"#eee","#777",4)+T(170,175,"600 N",{b:1,c:FC.f})+
+       C(330,70,36,"#e5e7eb","#9aa5b1",2.5)+C(318,60,6,"#cfd4da","#cfd4da",0)+C(342,82,8,"#cfd4da","#cfd4da",0)+PERSON(450,140,1)+R(420,140,60,14,"#eee","#777",4)+T(450,175,"? N",{b:1,c:FC.f})+lab(70,130,"지구")+lab(330,130,"달")),
+     o:["0 N","100 N","600 N","3600 N"],a:1,
+     e:"달의 중력은 지구의 약 1/6이므로 달에서 잰 무게도 약 1/6이 돼요. 600 N × 1/6 = 100 N. 하지만 질량은 지구에서와 같아요."},
+    {q:"그림은 질량이 300 g인 사과를 지구와 달에서 측정한 결과이다. 빈칸 (가)에 들어갈 알맞은 값은?",
+     f:()=>S(190,APPLE(130,70,24)+T(130,125,"지구",{b:1})+T(130,150,"질량: 300 g",{fs:13})+T(130,172,"무게: 2.94 N",{fs:13})+
+       APPLE(410,70,24)+T(410,125,"달",{b:1})+T(410,150,"질량: (가)",{fs:13,c:FC.r,b:1})+T(410,172,"무게: 0.49 N",{fs:13})+A(220,70,320,70,FC.s,{w:3,d:1})),
+     o:["50 g","300 g","1800 g","0.49 g"],a:1,
+     e:"질량은 물체의 고유한 양이라서 장소가 달라져도 변하지 않아요. 그래서 달에서도 300 g이에요. 장소에 따라 달라지는 것은 무게(중력의 크기)예요."},
+    {q:"그래프는 지구에서 물체의 질량과 무게의 관계를 나타낸 것이다. 질량이 3 kg인 물체의 무게는 약 얼마일까?",
+     f:()=>{const ox=90,oy=190,sx=110,sy=4.6;let s=L(ox,oy,ox+360,oy)+L(ox,oy,ox,oy-160);
+       for(let k=1;k<=3;k++)s+=L(ox+k*sx,oy,ox+k*sx,oy+5)+T(ox+k*sx,oy+20,k,{fs:12});
+       [10,20,30].forEach(v=>s+=L(ox-5,oy-v*sy,ox,oy-v*sy)+T(ox-10,oy-v*sy+4,v,{fs:12,a:"end"}));
+       s+=L(ox,oy,ox+2*sx,oy-19.6*sy,FC.f,3)+C(ox+sx,oy-9.8*sy,5,FC.f,FC.f)+C(ox+2*sx,oy-19.6*sy,5,FC.f,FC.f)+T(ox+sx-8,oy-9.8*sy-10,"9.8",{fs:12,a:"end",c:FC.f})+T(ox+2*sx+8,oy-19.6*sy-8,"19.6",{fs:12,a:"start",c:FC.f})+
+       L(ox+3*sx,oy,ox+3*sx,oy-150,"#9aa5b1",1.5,true)+T(ox+3*sx,oy-154,"?",{b:1,c:FC.r})+T(ox+360,oy+36,"질량(kg)",{fs:12,a:"end"})+T(ox,oy-168,"무게(N)",{fs:12});
+       return S(235,s);},
+     o:["3 N","9.8 N","19.6 N","29.4 N"],a:3,
+     e:"무게는 질량에 비례해요. 1 kg → 9.8 N, 2 kg → 19.6 N이므로 3 kg → 9.8 × 3 = 29.4 N이에요."}
+  ],
+  3:[
+    {q:"그림과 같이 용수철 운동 기구를 손으로 움켜쥐었다가 놓으면, 운동 기구가 원래 모양으로 되돌아가면서 손을 밀어낸다. 이때 운동 기구가 손을 밀어내는 힘은?",
+     f:()=>S(170,R(150,70,70,26,"#5aa9e6","#2b7bb9",12)+R(340,70,70,26,"#5aa9e6","#2b7bb9",12)+SP(220,83,340,83,9,"#555")+
+       `<ellipse cx="185" cy="83" rx="30" ry="22" fill="#ffe0bd" stroke="#c9a27c" stroke-width="2" opacity=".85"/><ellipse cx="375" cy="83" rx="30" ry="22" fill="#ffe0bd" stroke="#c9a27c" stroke-width="2" opacity=".85"/>`+
+       A(110,83,148,83,FC.f,{w:4,h:10})+A(450,83,412,83,FC.f,{w:4,h:10})+T(280,140,"양손으로 운동 기구를 움켜쥔다 (용수철이 줄어듦)",{fs:13,c:FC.s})),
+     o:["탄성력","마찰력","부력","중력"],a:0,
+     e:"변형된 물체가 원래 모양으로 되돌아가려는 힘이 탄성력이에요. 줄어든 용수철이 원래 길이로 돌아가려고 손을 바깥쪽으로 밀어내요."},
+    {q:"그림과 같이 한쪽 끝을 벽에 고정한 용수철을 손으로 오른쪽으로 잡아당겨 늘였다. 이때 용수철의 탄성력이 손에 작용하는 방향은?",
+     f:()=>S(170,WALL(80,40,140)+SP(80,90,320,90,12,"#555")+C(330,90,12,"#ffe0bd","#c9a27c")+A(345,90,440,90,FC.f)+T(395,75,"잡아당기는 힘",{fs:13,c:FC.f})),
+     o:["오른쪽 (잡아당긴 방향)","왼쪽 (원래 모양으로 되돌아가는 방향)","위쪽","아래쪽"],a:1,
+     e:"탄성력은 변형된 물체가 원래 모양으로 되돌아가려는 방향으로 작용해요. 오른쪽으로 늘어난 용수철은 왼쪽으로 줄어들려고 하므로 탄성력은 왼쪽이에요. 잡아당기는 힘과 크기가 같고 방향이 반대예요.",
+     ef:()=>S(170,WALL(80,40,140)+SP(80,90,320,90,12,"#555")+C(330,90,12,"#ffe0bd","#c9a27c")+A(345,90,440,90,FC.f)+T(395,75,"잡아당기는 힘",{fs:13,c:FC.f})+A(320,120,225,120,FC.e)+T(272,148,"탄성력",{fs:14,c:FC.e,b:1}))},
+    {q:"그림 (가)는 용수철의 원래 길이를, (나)는 같은 용수철에 5 N의 추를 매달았을 때 5 cm 늘어난 모습을 나타낸 것이다. 이 용수철의 탄성력이 15 N이 되려면 용수철을 몇 cm 늘여야 할까?",
+     f:()=>S(220,CEIL(110,250,20)+SP(180,20,180,110,9)+L(150,110,520,110,"#9aa5b1",1.5,true)+T(120,114,"원래 길이",{fs:12,a:"end",c:FC.s})+lab(180,205,"(가)")+
+       CEIL(320,460,20)+SP(390,20,390,160,12)+BLOCK(368,160,44,26,"5 N")+L(420,160,470,160,"#9aa5b1",1.5,true)+L(470,110,470,160,FC.r,2)+L(464,110,476,110,FC.r,2)+L(464,160,476,160,FC.r,2)+T(480,140,"5 cm",{fs:13,a:"start",c:FC.r,b:1})+lab(390,205,"(나)")),
+     o:["5 cm","10 cm","15 cm","20 cm"],a:2,
+     e:"탄성력의 크기는 용수철이 늘어난 길이에 비례해요. 5 N일 때 5 cm였으니, 탄성력이 3배인 15 N이 되려면 길이도 3배인 15 cm를 늘여야 해요."},
+    {q:"그래프는 어떤 용수철이 늘어난 길이에 따른 탄성력의 크기를 나타낸 것이다. 이 그래프로 알 수 있는 사실로 옳은 것은?",
+     f:()=>{const ox=90,oy=190,sx=40,sy=40;let s=L(ox,oy,ox+360,oy)+L(ox,oy,ox,oy-170);
+       for(let k=2;k<=8;k+=2)s+=L(ox+k*sx,oy,ox+k*sx,oy+5)+T(ox+k*sx,oy+20,k,{fs:12});
+       for(let v=1;v<=4;v++)s+=L(ox-5,oy-v*sy,ox,oy-v*sy)+T(ox-10,oy-v*sy+4,v,{fs:12,a:"end"});
+       s+=L(ox,oy,ox+6*sx,oy-3*sy,FC.e,3)+[[2,1],[4,2],[6,3]].map(p=>C(ox+p[0]*sx,oy-p[1]*sy,5,FC.e,FC.e)).join("")+T(ox+360,oy+36,"용수철이 늘어난 길이(cm)",{fs:12,a:"end"})+T(ox,oy-178,"탄성력(N)",{fs:12});
+       return S(235,s);},
+     o:["탄성력의 크기는 용수철이 늘어난 길이에 비례한다","탄성력의 크기는 늘어난 길이에 반비례한다","탄성력의 크기는 늘어난 길이와 관계없이 일정하다","용수철이 많이 늘어날수록 탄성력이 작아진다"],a:0,
+     e:"늘어난 길이가 2 cm → 4 cm → 6 cm로 2배, 3배가 될 때 탄성력도 1 N → 2 N → 3 N으로 2배, 3배가 돼요. 그래서 그래프가 원점을 지나는 직선이고, 탄성력은 늘어난 길이에 비례해요."}
+  ],
+  4:[
+    {q:"그림은 바닥 위에서 오른쪽으로 미끄러지고 있는 상자를 나타낸 것이다. 상자와 바닥의 접촉면에서 상자에 작용하는 마찰력의 방향은?",
+     f:()=>S(170,GND(130,30,530)+BLOCK(230,80,100,50)+A(240,55,330,55,FC.s,{w:3,d:1})+T(285,45,"운동 방향",{fs:13,c:FC.s})),
+     o:["오른쪽 (운동 방향과 같은 방향)","왼쪽 (운동 방향과 반대 방향)","위쪽","아래쪽"],a:1,
+     e:"마찰력은 두 물체의 접촉면에서 물체의 운동을 방해하는 힘이므로, 운동 방향과 반대인 왼쪽으로 작용해요.",
+     ef:()=>S(170,GND(130,30,530)+BLOCK(230,80,100,50)+A(240,55,330,55,FC.s,{w:3,d:1})+T(285,45,"운동 방향",{fs:13,c:FC.s})+A(280,124,180,124,FC.r)+T(170,115,"마찰력",{fs:14,c:FC.r,b:1,a:"end"}))},
+    {q:"그림은 나무 도막을 용수철저울로 천천히 끌어, 움직이기 시작할 때의 눈금을 재는 실험이다. (가)와 (나)의 결과를 비교하면 알 수 있는 사실은?",
+     f:()=>S(230,FRROWS([{t:"(가)",surf:"나무판",n:1,c:"#e7c99a"},{t:"(나)",surf:"나무판",n:2,c:"#e7c99a"},{t:"(다)",surf:"사포",n:1,c:"#b9a88c",dots:1}])),
+     o:["물체의 무게가 무거울수록 마찰력이 크다","접촉면이 거칠수록 마찰력이 크다","접촉면이 매끈할수록 마찰력이 크다","마찰력은 물체의 무게와 관계없다"],a:0,
+     e:"(가)와 (나)는 바닥면(나무판)은 같고 나무 도막의 개수(무게)만 달라요. 도막 2개를 끌 때 눈금이 더 크므로, 물체의 무게가 무거울수록 마찰력이 커요."},
+    {q:"같은 실험에서 (가)와 (다)의 결과를 비교하면 알 수 있는 사실은?",
+     f:()=>S(230,FRROWS([{t:"(가)",surf:"나무판",n:1,c:"#e7c99a"},{t:"(나)",surf:"나무판",n:2,c:"#e7c99a"},{t:"(다)",surf:"사포",n:1,c:"#b9a88c",dots:1}])),
+     o:["물체의 무게가 무거울수록 마찰력이 크다","접촉면이 거칠수록 마찰력이 크다","접촉면이 거칠수록 마찰력이 작다","마찰력은 접촉면의 성질과 관계없다"],a:1,
+     e:"(가)와 (다)는 나무 도막 개수(무게)는 같고 바닥면만 달라요. 거친 사포 위에서 눈금이 더 크므로, 접촉면이 거칠수록 마찰력이 커요."},
+    {q:"그림과 같이 수평면에 놓인 상자를 5 N의 힘으로 오른쪽으로 당겼지만 상자가 움직이지 않았다. 상자에 작용하는 마찰력의 크기와 방향은?",
+     f:()=>S(170,GND(130,30,530)+BLOCK(200,75,110,55)+L(310,100,340,100,"#444",2)+C(348,100,10,"#ffe0bd","#c9a27c")+A(360,100,450,100,FC.f)+T(405,85,"5 N",{fs:14,c:FC.f,b:1})+T(255,60,"움직이지 않음",{fs:13,c:FC.s})),
+     o:["0 N","5 N, 왼쪽","5 N, 오른쪽","10 N, 왼쪽"],a:1,
+     e:"상자가 움직이지 않으므로 당기는 힘과 마찰력이 평형을 이뤄요. 그래서 마찰력은 당기는 힘과 크기가 같은 5 N이고, 방향은 반대인 왼쪽이에요.",
+     ef:()=>S(170,GND(130,30,530)+BLOCK(200,75,110,55)+L(310,100,340,100,"#444",2)+C(348,100,10,"#ffe0bd","#c9a27c")+A(360,100,450,100,FC.f)+T(405,85,"5 N",{fs:14,c:FC.f,b:1})+A(255,124,165,124,FC.r)+T(155,118,"마찰력 5 N",{fs:14,c:FC.r,b:1,a:"end"}))}
+  ],
+  5:[
+    {q:"그림과 같이 막대 양쪽에 같은 추를 매달아 수평을 맞춘 뒤, 오른쪽 컵에만 물을 부었더니 막대가 왼쪽으로 기울었다. 물에 잠긴 추에 작용한 힘의 방향으로 옳은 것은?",
+     f:()=>S(230,L(280,20,280,60,"#555",4)+C(280,60,5,"#555","#555")+L(140,74,420,46,"#6b4a1f",6)+
+       L(140,74,140,150)+R(124,150,32,26,"#9aa5b1","#4a5568",3)+BEAKER(100,120,80,90,null)+
+       L(420,46,420,122)+BEAKER(380,90,80,120,95)+R(404,122,32,26,"#9aa5b1","#4a5568",3)+T(140,225,"물이 없는 컵",{fs:12,c:FC.s})+T(420,225,"물을 부은 컵",{fs:12,c:FC.s})),
+     o:["아래쪽 (중력과 같은 방향)","위쪽 (중력과 반대 방향)","왼쪽","오른쪽"],a:1,
+     e:"두 추에 작용하는 중력은 같은데 물에 잠긴 오른쪽이 위로 올라갔어요. 물이 추를 위쪽으로 밀어 올리는 힘, 즉 부력이 작용했기 때문이에요. 부력은 중력과 반대 방향인 위쪽으로 작용해요."},
+    {q:"그림 (가)는 물체를 공기 중에서, (나)는 같은 물체를 물속에 완전히 잠기게 하여 용수철저울로 잰 것이다. 물체에 작용하는 부력의 크기는?",
+     f:()=>S(244,L(100,10,200,10,"#6b7785",4)+L(150,10,150,30)+VSCALE(150,30,"10 N")+L(150,96,150,120)+BLOCK(126,120,48,40)+lab(150,234,"(가) 공기 중")+
+       L(360,10,460,10,"#6b7785",4)+L(410,10,410,30)+VSCALE(410,30,"4 N")+L(410,96,410,140)+BEAKER(350,110,120,95,80)+BLOCK(386,140,48,40)+lab(410,234,"(나) 물속")),
+     o:["4 N","6 N","10 N","14 N"],a:1,
+     e:"물속에서 눈금이 줄어든 만큼이 부력이에요. 부력 = 공기 중에서 잰 값 − 물속에서 잰 값 = 10 N − 4 N = 6 N, 방향은 위쪽이에요."},
+    {q:"그림은 100 g짜리 추 4개를 매단 힘 센서를 물이 든 눈금실린더에 점점 깊이 넣으며 측정한 값이다. 이 실험 결과로 알 수 있는 것은?",
+     f:()=>{let s="";[[0,"3.9 N","잠기기 전"],[2,"3.7 N","추 2개 잠김"],[4,"3.5 N","추 4개 잠김"]].forEach((d,i)=>{const cx=100+i*180,surf=140-d[0]*2,bot=surf+d[0]*18;
+       s+=SENSOR(cx,8,d[1])+L(cx,44,cx,bot-72)+[0,1,2,3].map(k=>R(cx-14,bot-72+k*18,28,16,"#9aa5b1","#4a5568",3)).join("")+BEAKER(cx-40,95,80,120,215-surf)+T(cx,235,d[2],{fs:12,c:FC.s});});
+       return S(245,s);},
+     o:["물에 잠긴 부피가 클수록 부력이 크다","물에 잠긴 부피가 클수록 부력이 작다","부력의 크기는 물에 잠긴 부피와 관계없다","물에 넣으면 추에 작용하는 중력이 사라진다"],a:0,
+     e:"부력은 3.9 − 3.7 = 0.2 N(추 2개 잠김), 3.9 − 3.5 = 0.4 N(추 4개 잠김)이에요. 물에 잠긴 부피가 클수록 부력이 커져요. 추에 작용하는 중력은 물속에서도 그대로예요."},
+    {q:"그림 (가)는 화물을 조금 실은 배, (나)는 같은 배에 화물을 가득 실은 모습이다. 두 배는 모두 물 위에 떠서 정지해 있다. 이에 대한 설명으로 옳은 것은?",
+     f:()=>{const ship=(x,top,n)=>{let s=P(`M${x},${top} h150 l-20,50 h-110 z`,"#e07a5f","#9c3d22",2);for(let k=0;k<n;k++)s+=R(x+20+(k%5)*24,top-22-Math.floor(k/5)*20,22,20,"#f2cc8f","#a0773a",2);return s;};
+       return S(205,ship(40,82,2)+ship(330,98,10)+WAT(10,110,540,80)+P("M40,82 h150 l-20,50 h-110 z","none","#9c3d22",1.5)+P("M330,98 h150 l-20,50 h-110 z","none","#9c3d22",1.5)+lab(115,200,"(가)")+lab(405,200,"(나)"));},
+     o:["(나)가 (가)보다 더 큰 부력을 받는다","(가)가 (나)보다 더 큰 부력을 받는다","두 배가 받는 부력의 크기는 같다","물에 떠 있는 배에는 부력이 작용하지 않는다"],a:0,
+     e:"물에 떠서 정지한 배는 중력과 부력이 평형을 이뤄요. 화물을 가득 실은 (나)는 중력이 더 크므로 물에 더 많이 잠기고, 그만큼 더 큰 부력을 받아요."}
+  ],
+  6:[
+    {q:"그림과 같이 한 물체에 같은 방향으로 6 N과 3 N의 힘이 동시에 작용하고 있다. 이 물체에 작용하는 알짜힘은?",
+     f:()=>S(160,R(170,55,60,60,"#dfe7f2","#6b7f99",5)+A(230,72,350,72,FC.f)+T(360,77,"6 N",{a:"start",c:FC.f,b:1})+A(230,98,290,98,FC.g)+T(300,103,"3 N",{a:"start",c:FC.g,b:1})+T(280,150,"(화살표 길이는 힘의 크기에 비례)",{fs:11,c:FC.s})),
+     o:["3 N, 오른쪽","9 N, 오른쪽","9 N, 왼쪽","18 N, 오른쪽"],a:1,
+     e:"두 힘의 방향이 같으면 알짜힘의 크기는 두 힘의 합이고, 방향은 두 힘의 방향과 같아요. 6 N + 3 N = 9 N, 오른쪽!"},
+    {q:"그림과 같이 한 물체를 오른쪽으로 100 N, 왼쪽으로 50 N의 힘으로 동시에 당기고 있다. 이 물체에 작용하는 알짜힘은?",
+     f:()=>S(150,R(250,50,60,60,"#dfe7f2","#6b7f99",5)+A(310,80,460,80,FC.f)+T(470,85,"100 N",{a:"start",c:FC.f,b:1})+A(250,80,175,80,FC.g)+T(165,85,"50 N",{a:"end",c:FC.g,b:1})),
+     o:["50 N, 오른쪽","50 N, 왼쪽","150 N, 오른쪽","150 N, 왼쪽"],a:0,
+     e:"두 힘의 방향이 반대이면 알짜힘의 크기는 두 힘의 차(100 − 50 = 50 N)이고, 방향은 더 큰 힘의 방향(오른쪽)이에요."},
+    {q:"그림과 같이 종이 위의 고리에 용수철저울 3개를 걸고, 고리가 움직이지 않도록 힘1과 힘2는 왼쪽으로, 힘3은 오른쪽으로 당겼다. 힘1이 3 N, 힘2가 4 N일 때 힘3의 크기는?",
+     f:()=>S(170,R(40,20,480,130,"#fffdf5","#e4e0d6",8)+C(280,85,14,"#fff","#555",3)+
+       L(266,80,170,62,"#444",2)+HSCALE(100,62,"3 N",70)+T(135,46,"힘1",{fs:13,c:FC.s})+L(266,90,170,108,"#444",2)+HSCALE(100,108,"4 N",70)+T(135,138,"힘2",{fs:13,c:FC.s})+
+       L(294,85,390,85,"#444",2)+HSCALE(390,85,"?",70)+T(425,69,"힘3",{fs:13,c:FC.s})),
+     o:["1 N","3 N","7 N","12 N"],a:2,
+     e:"고리가 움직이지 않으므로 알짜힘이 0이에요. 왼쪽으로 당기는 힘의 합(3 N + 4 N = 7 N)과 오른쪽으로 당기는 힘3이 평형을 이루므로 힘3 = 7 N이에요.",
+     ef:()=>S(150,C(280,75,14,"#fff","#555",3)+A(266,70,176,70,FC.f)+A(266,82,146,82,FC.g)+A(294,76,504,76,FC.e)+T(165,60,"3 N",{c:FC.f,b:1})+T(135,102,"4 N",{c:FC.g,b:1})+T(480,64,"7 N",{c:FC.e,b:1})+T(280,135,"왼쪽 3 N + 4 N = 오른쪽 7 N → 알짜힘 0",{fs:14,c:FC.n,b:1}))},
+    {q:"그림은 일정한 속력으로 똑바로 움직이는 무빙워크 위에 가만히 서 있는 사람이다. 이 사람에 대한 설명으로 옳은 것은?",
+     f:()=>S(170,R(60,120,440,22,"#9aa5b1","#4a5568",11)+C(71,131,9,"#666","#333")+C(489,131,9,"#666","#333")+PERSON(260,118,1)+A(320,60,420,60,FC.s,{w:3})+T(370,48,"일정한 속력",{fs:13,c:FC.s})),
+     o:["알짜힘이 0이고, 속력과 운동 방향이 일정하다","알짜힘이 0이 아니어서 속력이 점점 빨라진다","알짜힘이 0이므로 곧 멈추게 된다","운동 방향만 계속 바뀐다"],a:0,
+     e:"알짜힘이 0이면 물체의 운동 상태가 변하지 않아요. 정지한 물체는 계속 정지하고, 운동하는 물체는 무빙워크 위의 사람처럼 일정한 방향과 속력으로 계속 운동해요."}
+  ],
+  7:[
+    {q:"그림과 같이 오른쪽으로 굴러가는 탁구공의 뒤쪽에서 빨대로 바람을 불어, 운동 방향과 같은 방향으로 힘을 계속 주었다. 탁구공의 운동은 어떻게 될까?",
+     f:()=>S(160,GND(120,30,530)+BALL(300,106,14,"#fff")+L(150,106,230,106,"#e0b04a",8)+A(238,106,282,106,"#9aa5b1",{w:3,h:9,d:1})+T(255,92,"바람",{fs:12,c:FC.s})+A(320,70,400,70,FC.s,{w:3})+T(360,58,"운동 방향",{fs:13,c:FC.s})+T(190,96,"빨대",{fs:12,c:FC.s})),
+     o:["속력이 점점 증가한다","속력이 점점 감소한다","운동 방향만 변한다","아무 변화도 없다"],a:0,
+     e:"운동 방향과 같은 방향으로 알짜힘을 받으면 속력이 점점 증가해요. 반대 방향으로 받으면 속력이 점점 감소해요. 두 경우 모두 운동 방향은 그대로예요."},
+    {q:"그림은 일정한 속력으로 도는 회전목마를 위에서 본 모습이다. 화살표는 어느 순간 목마의 운동 방향과 목마에 작용하는 알짜힘의 방향을 나타낸 것이다. 이 운동에 대한 설명으로 옳은 것은?",
+     f:()=>S(230,C(280,115,80,"none","#9aa5b1",2)+`<circle cx="280" cy="115" r="80" fill="none" stroke="#9aa5b1" stroke-dasharray="6 6"/>`+C(280,115,5,FC.k,FC.k)+C(360,115,13,"#f2cc8f","#a0773a")+
+       A(360,100,360,35,FC.s,{w:4})+T(370,45,"운동 방향",{fs:13,c:FC.s,a:"start"})+A(345,115,300,115,FC.n,{w:4})+T(322,140,"알짜힘",{fs:13,c:FC.n,b:1})),
+     o:["알짜힘이 운동 방향과 항상 수직이어서 운동 방향만 변한다","알짜힘이 운동 방향과 같아서 속력만 변한다","속력과 운동 방향이 모두 일정하다","알짜힘이 0이다"],a:0,
+     e:"원운동처럼 운동 방향과 항상 수직으로 일정한 크기의 알짜힘을 받으면, 속력은 일정하고 운동 방향만 계속 변해요. 대관람차도 같은 운동이에요."},
+    {q:"그림 (가)~(라)는 놀이공원과 주변에서 볼 수 있는 운동이다. 속력과 운동 방향이 모두 변하는 운동은?",
+     f:()=>{let s="";
+       s+=R(50,20,22,150,"#cfd4da","#6b7785",3)+R(40,80,42,22,"#e07a5f","#9c3d22",4)+A(95,70,95,140,FC.s,{w:3,h:9})+lab(70,200,"(가) 낙하 놀이 기구");
+       s+=C(210,90,58,"none","#6b7785",3)+[0,60,120,180,240,300].map(d=>{const r=d*Math.PI/180;return L(210,90,210+58*Math.cos(r),90+58*Math.sin(r),"#9aa5b1",1.5)+R(210+58*Math.cos(r)-8,90+58*Math.sin(r)-6,16,13,"#f2cc8f","#a0773a",3);}).join("")+L(210,90,185,170,"#6b7785",3)+L(210,90,235,170,"#6b7785",3)+lab(210,200,"(나) 대관람차");
+       s+=L(320,25,420,25,"#6b4a1f",5)+L(330,25,320,170,"#6b4a1f",4)+L(410,25,420,170,"#6b4a1f",4)+L(370,25,330,120,"#555",2)+R(318,118,26,8,"#e07a5f","#9c3d22",2)+`<path d="M300,100 A80,80 0 0 0 440,100" fill="none" stroke="#9aa5b1" stroke-dasharray="5 5" stroke-width="2"/>`+lab(370,200,"(다) 그네");
+       s+=R(450,138,100,14,"#9aa5b1","#4a5568",7)+PERSON(500,136,0.8)+A(480,60,530,60,FC.s,{w:3,h:9})+lab(500,200,"(라) 무빙워크");
+       return S(210,s);},
+     o:["(가)","(나)","(다)","(라)"],a:2,
+     e:"(가) 낙하 놀이 기구는 속력만, (나) 대관람차는 운동 방향만 변해요. (다) 그네는 속력과 운동 방향이 모두 변해요. (라) 무빙워크는 속력과 운동 방향이 일정해요(알짜힘 0)."},
+    {q:"그림은 높은 곳에서 가만히 놓은 공의 위치를 일정한 시간 간격으로 찍은 것이다. 이 공의 운동에 대한 설명으로 옳은 것은?",
+     f:()=>{const ys=[0,1,2,3,4,5].map(t=>22+6.2*t*t);return S(200,L(220,15,220,190,"#e4e0d6",1,true)+DOTS(ys.map(y=>[280,y]),9,"#ffd166")+T(380,60,"같은 시간 간격으로",{fs:12,c:FC.s})+T(380,78,"찍은 공의 위치",{fs:12,c:FC.s}));},
+     o:["운동 방향은 일정하고 속력만 점점 빨라진다","속력은 일정하고 운동 방향만 변한다","속력과 운동 방향이 모두 변한다","속력과 운동 방향이 모두 일정하다"],a:0,
+     e:"공은 아래쪽으로 곧게 떨어지므로 운동 방향은 일정해요. 같은 시간 동안 이동한 거리(공 사이 간격)가 점점 넓어지므로 속력이 점점 빨라져요. 운동 방향과 같은 방향(아래쪽)으로 중력이 알짜힘으로 작용하기 때문이에요."}
+  ],
+  8:[
+    {q:"그림은 책상 위에 가만히 놓인 시계에 작용하는 두 힘 A와 B를 나타낸 것이다. 두 힘은 평형을 이루고 있다. A와 B를 바르게 짝 지은 것은?",
+     f:()=>S(190,R(120,120,320,16,"#c08a5b","#7a5420",3)+L(150,136,150,185,"#7a5420",6)+L(410,136,410,185,"#7a5420",6)+C(280,82,36,"#fff","#555",4)+L(280,82,280,60,"#333",3)+L(280,82,296,92,"#333",3)+
+       A(266,82,266,150,FC.g)+T(252,160,"A",{b:1,c:FC.g,a:"end"})+A(296,118,296,50,FC.f)+T(310,48,"B",{b:1,c:FC.f,a:"start"})),
+     o:["A: 중력, B: 책상이 시계를 떠받치는 힘","A: 부력, B: 중력","A: 마찰력, B: 탄성력","A: 책상이 떠받치는 힘, B: 중력"],a:0,
+     e:"시계에는 아래 방향으로 중력(A)이, 위 방향으로 책상이 시계를 떠받치는 힘(B)이 같은 크기로 작용해서 힘의 평형을 이뤄요. 그래서 시계는 계속 정지해 있어요."},
+    {q:"그림과 같이 문 아래에 문 고정 장치를 끼워 문이 닫히지 않게 했다. 문이 닫히려는 힘과 평형을 이루는 힘은?",
+     f:()=>S(205,R(40,170,110,14,"#cfd4da","#6b7785",0)+R(322,170,198,14,"#cfd4da","#6b7785",0)+C(150,177,5,"#555","#333")+
+       L(150,177,270,57,"#a0773a",12)+`<path d="M320,177 A170,170 0 0 0 270,57" fill="none" stroke="#9aa5b1" stroke-width="1.5" stroke-dasharray="5 5"/>`+
+       P("M268,72 L286,62 L284,84 Z","#e07a5f","#9c3d22",2)+T(296,70,"문 고정 장치",{fs:12,c:FC.s,a:"start"})+
+       A(212,118,246,152,FC.f,{w:4,h:10})+T(254,150,"문이 닫히려는 힘",{fs:12,c:FC.f,a:"start"})+T(95,160,"벽",{fs:12,c:FC.s})+T(160,198,"경첩",{fs:11,c:FC.s,a:"start"})+T(460,40,"(위에서 본 모습)",{fs:12,c:FC.s})),
+     o:["마찰력","부력","중력","알짜힘"],a:0,
+     e:"문 고정 장치와 바닥, 문 사이의 마찰력이 문이 닫히려는 힘과 평형을 이뤄서 문이 움직이지 않아요."},
+    {q:"그림 (가)는 물이 가득 찬 집기병이 물속에 가라앉아 있는 모습, (나)는 집기병 속 풍선에 공기를 넣었더니 집기병이 떠오른 모습이다. (나)에서 집기병이 떠오른 까닭으로 옳은 것은?",
+     f:()=>{const tank=(x)=>BEAKER(x,40,220,160,135);const bottle=(x,y,p)=>R(x,y,56,80,"rgba(255,255,255,.35)","#4a5568",10)+R(x+3,y+80-3-(74*(1-p)),50,74*(1-p),"#5aa9e6","#5aa9e6",6)+`<ellipse cx="${x+28}" cy="${y+22}" rx="${5+p*20}" ry="${5+p*16}" fill="#ff6b9a"/>`+R(x+18,y-8,20,10,"#8d6e63","#5d4037",2);
+       return S(225,tank(30)+bottle(112,112,0.05)+P("M140,104 C140,30 120,20 100,20","none","#333",2)+lab(140,220,"(가)")+tank(310)+bottle(392,52,0.85)+P("M420,44 C420,20 500,15 520,20","none","#333",2)+R(510,10,30,40,"#f4a261","#9c5a22",5)+lab(420,220,"(나)"));},
+     o:["풍선이 부풀어 집기병 속 물이 빠져나가 무게가 줄고, 부력이 무게보다 커졌기 때문","집기병에 작용하는 부력이 사라졌기 때문","집기병에 작용하는 중력이 커졌기 때문","집기병과 물 사이의 마찰력이 커졌기 때문"],a:0,
+     e:"(가)에서는 집기병 속에 물이 가득해 무게가 부력보다 커서 가라앉아요. (나)에서는 풍선이 부풀며 물이 빠져나가 집기병 전체의 무게가 줄어들고, 부력 > 무게가 되어 떠올라요. 잠수함도 물탱크의 물을 넣고 빼서 뜨고 가라앉아요."},
+    {q:"그림은 자전거의 여러 부분이다. A~D 중, 마찰력을 줄이려고 윤활유를 바르는 곳은?",
+     f:()=>{let s=C(130,140,48,"none","#333",5)+C(400,140,48,"none","#333",5);
+       for(let k=0;k<16;k++){const r=k*Math.PI/8;s+=L(130+48*Math.cos(r),140+48*Math.sin(r),130+54*Math.cos(r),140+54*Math.sin(r),"#333",2);}
+       s+=P("M130,140 L230,140 L330,70 L200,70 Z","none","#2f6fde",4)+L(330,70,400,140,"#2f6fde",4)+L(200,70,185,50,"#2f6fde",4)+R(165,40,42,10,"#333","#333",4)+SP(186,50,186,64,3,"#e0561f")+L(330,70,322,40,"#2f6fde",4)+L(305,38,345,38,"#333",5)+C(322,48,5,"#ffd166","#a0773a")+C(230,140,10,"#ccc","#555")+R(222,154,22,7,"#333","#333",2);
+       s+=T(60,190,"A",{b:1,c:FC.r})+L(68,186,92,176,FC.r,1.5)+T(360,25,"B",{b:1,c:FC.r})+L(352,28,328,44,FC.r,1.5)+T(270,190,"C",{b:1,c:FC.r})+L(262,186,242,162,FC.r,1.5)+T(150,25,"D",{b:1,c:FC.r})+L(158,30,180,56,FC.r,1.5);
+       s+=T(470,70,"A: 바퀴(타이어) 홈",{fs:12,a:"start"})+T(470,90,"B: 핸들 회전축",{fs:12,a:"start"})+T(470,110,"C: 페달",{fs:12,a:"start"})+T(470,130,"D: 안장 아래 용수철",{fs:12,a:"start"});
+       return S(205,s,640);},
+     o:["A","B","C","D"],a:1,
+     e:"B(핸들 회전축)에는 마찰력을 줄여 부드럽게 돌아가도록 윤활유를 발라요. A(바퀴 홈)는 마찰력의 크기를 조절하고, C(페달)는 마찰력을 크게 해서 발이 미끄러지지 않게 해요. D(안장 아래 용수철)는 탄성력으로 충격을 흡수해요."}
+  ],
+  final:[
+    {q:"그림은 지구 위의 P 지점과 P에서 그린 화살표 A~D를 나타낸 것이다. P에 있는 물체에 작용하는 중력의 방향은?",
+     f:()=>{const cx=230,cy=125,r=80,px=cx+r*0.707,py=cy-r*0.707;return S(240,EARTH(cx,cy,r)+C(px,py,5,FC.k,FC.k)+T(px+8,py-8,"P",{b:1,a:"start"})+
+       A(px,py,px-36,py+36,FC.f,{w:3,h:10})+T(px-44,py+52,"A",{b:1,c:FC.f})+A(px,py,px,py+52,FC.f,{w:3,h:10})+T(px+10,py+62,"B",{b:1,c:FC.f})+
+       A(px,py,px+36,py-36,FC.f,{w:3,h:10})+T(px+46,py-40,"C",{b:1,c:FC.f})+A(px,py,px+40,py+40,FC.f,{w:3,h:10})+T(px+54,py+52,"D",{b:1,c:FC.f}),460);},
+     o:["A","B","C","D"],a:0,
+     e:"중력의 방향은 지구 중심 방향이에요. P에서 지구 중심을 향하는 화살표는 A예요. B는 그림의 아래쪽일 뿐 지구 중심 방향이 아니에요."},
+    {q:"그림은 어떤 물체의 무게를 지구와 달에서 측정한 결과이다(지구에서 1 kg의 무게는 약 9.8 N). 이 물체의 질량은 지구와 달에서 각각 얼마일까?",
+     f:()=>S(200,lab(140,30,"지구")+L(140,40,140,60)+VSCALE(140,60,"58.8 N")+L(140,126,140,140)+BLOCK(115,140,50,36)+lab(420,30,"달")+L(420,40,420,60)+VSCALE(420,60,"9.8 N")+L(420,126,420,140)+BLOCK(395,140,50,36)),
+     o:["지구 1 kg, 달 1 kg","지구 6 kg, 달 1 kg","지구 6 kg, 달 6 kg","지구 1 kg, 달 6 kg"],a:2,
+     e:"지구에서 58.8 N ÷ 9.8 = 6 kg이에요. 질량은 장소가 바뀌어도 변하지 않으므로 달에서도 6 kg이에요. 달에서 무게가 9.8 N(지구의 1/6)으로 줄어든 거예요."},
+    {q:"그림 (가)는 용수철에 4 N의 추를 매달았을 때 2 cm 늘어난 모습이고, (나)는 같은 용수철이 8 cm 늘어난 모습이다. (나)에서 용수철에 작용한 힘의 크기는?",
+     f:()=>S(240,CEIL(100,240,20)+SP(170,20,170,100,9)+BLOCK(148,100,44,26,"4 N")+T(205,96,"+2 cm",{fs:13,a:"start",c:FC.r,b:1})+lab(170,230,"(가)")+
+       CEIL(320,460,20)+SP(390,20,390,180,14)+BLOCK(368,180,44,26,"?")+T(425,176,"+8 cm",{fs:13,a:"start",c:FC.r,b:1})+lab(390,230,"(나)")),
+     o:["8 N","12 N","16 N","32 N"],a:2,
+     e:"용수철의 탄성력은 늘어난 길이에 비례해요. 늘어난 길이가 2 cm → 8 cm로 4배가 되었으므로 힘도 4 N × 4 = 16 N이에요."},
+    {q:"그림은 나무 도막을 용수철저울로 천천히 끌어, 움직이기 시작할 때 눈금을 재는 실험이다. (가)~(다)에서 마찰력의 크기를 바르게 비교한 것은?",
+     f:()=>S(230,FRROWS([{t:"(가)",surf:"유리판",n:1,c:"#d8f0fb"},{t:"(나)",surf:"유리판",n:2,c:"#d8f0fb"},{t:"(다)",surf:"고무판",n:2,c:"#6b6b6b"}])),
+     o:["(가) > (나) > (다)","(다) > (나) > (가)","(나) > (가) > (다)","(가) = (나) = (다)"],a:1,
+     e:"무게가 무거울수록((나) > (가)), 접촉면이 거칠수록((다) > (나)) 마찰력이 커요. 그래서 (다) > (나) > (가)예요."},
+    {q:"그림 (가)는 공기 중에서, (나)는 물속에서 같은 물체를 용수철저울로 잰 것이다. 물체에 작용하는 부력의 크기와 방향은?",
+     f:()=>S(244,L(100,10,200,10,"#6b7785",4)+L(150,10,150,30)+VSCALE(150,30,"6 N")+L(150,96,150,120)+BLOCK(126,120,48,40)+lab(150,234,"(가) 공기 중")+
+       L(360,10,460,10,"#6b7785",4)+L(410,10,410,30)+VSCALE(410,30,"4 N")+L(410,96,410,140)+BEAKER(350,110,120,95,80)+BLOCK(386,140,48,40)+lab(410,234,"(나) 물속")),
+     o:["2 N, 위쪽","2 N, 아래쪽","10 N, 위쪽","4 N, 아래쪽"],a:0,
+     e:"부력 = 6 N − 4 N = 2 N이고, 방향은 중력과 반대인 위쪽이에요."},
+    {q:"그림과 같이 한 물체에 오른쪽으로 20 N, 왼쪽으로 10 N의 힘이 동시에 작용하고 있다. 이 물체에 작용하는 알짜힘은?",
+     f:()=>S(150,R(250,50,60,60,"#dfe7f2","#6b7f99",5)+A(310,80,430,80,FC.f)+T(440,85,"20 N",{a:"start",c:FC.f,b:1})+A(250,80,190,80,FC.g)+T(180,85,"10 N",{a:"end",c:FC.g,b:1})),
+     o:["10 N, 오른쪽","10 N, 왼쪽","30 N, 오른쪽","20 N, 왼쪽"],a:0,
+     e:"반대 방향이면 두 힘의 차: 20 − 10 = 10 N, 방향은 더 큰 힘의 방향인 오른쪽이에요.",
+     ef:()=>S(150,R(250,50,60,60,"#dfe7f2","#6b7f99",5)+A(310,70,430,70,FC.f,{w:3})+A(250,70,190,70,FC.g,{w:3})+A(280,128,340,128,FC.n,{w:6})+T(350,133,"알짜힘 10 N",{a:"start",c:FC.n,b:1}))},
+    {q:"그림과 같이 바닥에 놓인 상자를 300 N의 힘으로 밀었지만 상자가 움직이지 않았다. 이때 상자에 작용하는 마찰력과 알짜힘의 크기는?",
+     f:()=>S(180,GND(150,30,530)+PERSON(150,150,1.2,true)+BLOCK(185,70,150,80)+A(110,48,178,48,FC.f)+T(144,36,"미는 힘 300 N",{c:FC.f,b:1})+T(260,60,"움직이지 않음",{fs:13,c:FC.s})),
+     o:["마찰력 0 N, 알짜힘 0 N","마찰력 0 N, 알짜힘 300 N","마찰력 300 N, 알짜힘 0 N","마찰력 300 N, 알짜힘 300 N"],a:2,
+     e:"상자가 움직이지 않으므로 미는 힘(300 N)과 마찰력이 평형을 이뤄요. 마찰력 = 300 N, 알짜힘 = 0이에요."},
+    {q:"그림 (가)는 낙하산을 펴기 전, (나)는 낙하산을 편 뒤 스카이다이버의 위치를 일정한 시간 간격으로 나타낸 것이다. (나)에서 스카이다이버에게 작용하는 알짜힘에 대한 설명으로 옳은 것은?",
+     f:()=>{const ya=[0,1,2,3,4].map(t=>26+8*t*t),yb=[0,1,2,3,4].map(t=>30+38*t);return S(215,DOTS(ya.map(y=>[150,y]),8,"#e07a5f")+lab(150,210,"(가) 낙하산 펴기 전")+
+       DOTS(yb.map(y=>[410,y]),8,"#e07a5f")+P("M385,14 Q410,-6 435,14","#7cc4f2","#2b7bb9",2)+L(388,14,410,30,"#555",1)+L(432,14,410,30,"#555",1)+lab(410,210,"(나) 낙하산 편 뒤"));},
+     o:["0이다 (위아래로 작용하는 힘이 평형을 이룸)","0이다 (중력이 작용하지 않음)","중력의 크기와 같다","시간이 지날수록 커진다"],a:0,
+     e:"(나)에서는 같은 시간 간격 동안 이동한 거리가 같으므로 일정한 속력으로 떨어져요. 운동 상태가 변하지 않으므로 알짜힘은 0이에요. 중력은 여전히 작용하지만, 위로 작용하는 힘과 평형을 이루어 알짜힘이 0이 된 거예요."},
+    {q:"그림은 일정한 속력으로 돌고 있는 대관람차이다. 대관람차의 칸에 탄 사람의 운동에서 변하는 것은?",
+     f:()=>{let s=C(280,100,72,"none","#6b7785",3);[0,45,90,135,180,225,270,315].forEach(d=>{const r=d*Math.PI/180;s+=L(280,100,280+72*Math.cos(r),100+72*Math.sin(r),"#9aa5b1",1.5)+R(280+72*Math.cos(r)-9,100+72*Math.sin(r)-6,18,14,"#f2cc8f","#a0773a",3);});
+       s+=L(280,100,250,195,"#6b7785",4)+L(280,100,310,195,"#6b7785",4)+`<path d="M370,60 A100,100 0 0 1 380,140" fill="none" stroke="${FC.s}" stroke-width="3" stroke-dasharray="6 5"/>`+A(379,128,375,146,FC.s,{w:3,h:10})+T(420,105,"일정한 속력",{fs:12,c:FC.s,a:"start"});return S(210,s);},
+     o:["속력만 변한다","운동 방향만 변한다","속력과 운동 방향이 모두 변한다","아무것도 변하지 않는다"],a:1,
+     e:"대관람차는 일정한 속력으로 원운동을 하므로 속력은 일정하고, 운동 방향만 계속 변해요. 알짜힘이 운동 방향과 항상 수직으로 작용하기 때문이에요."},
+    {q:"그림은 굴러가는 탁구공에 빨대로 바람을 불어 준 뒤, 탁구공의 위치를 일정한 시간 간격으로 찍은 것이다. 탁구공의 운동에 대한 설명으로 옳은 것은?",
+     f:()=>{const pts=[0,1,2,3,4,5].map(t=>[70+48*t+5*t*t,40+5*t*t]);return S(200,R(20,20,520,170,"#e9f7ec","#bfe0c7",10)+DOTS(pts,9,"#fff")+L(250,26,292,54,"#e0b04a",7)+A(300,60,335,84,"#9aa5b1",{w:3,h:9,d:1})+T(240,24,"빨대",{fs:12,c:FC.s,a:"end"})+T(344,100,"바람",{fs:12,c:FC.s,a:"start"})+A(40,176,90,176,FC.s,{w:3,h:9})+T(98,180,"처음 운동 방향",{fs:12,c:FC.s,a:"start"}));},
+     o:["속력만 변했다","운동 방향만 변했다","속력과 운동 방향이 모두 변했다","속력과 운동 방향이 모두 일정하다"],a:2,
+     e:"공 사이 간격이 점점 넓어지니 속력이 변했고, 공이 지나간 길이 휘었으니 운동 방향도 변했어요. 운동 방향과 비스듬하게 알짜힘을 받으면 속력과 운동 방향이 모두 변해요."},
+    {q:"그림은 물놀이 공원에서 풍선놀이틀이 물 위에 떠서 정지해 있는 모습이다. 풍선놀이틀에 작용하는 두 힘 A와 B를 바르게 짝 지은 것은?",
+     f:()=>S(200,WAT(10,110,540,85)+`<ellipse cx="280" cy="108" rx="150" ry="26" fill="#ffb4a2" stroke="#e07a5f" stroke-width="3"/>`+PERSON(240,96,0.7)+PERSON(320,96,0.7)+
+       A(200,100,200,170,FC.g)+T(186,172,"A",{b:1,c:FC.g,a:"end"})+A(360,120,360,50,FC.f)+T(374,52,"B",{b:1,c:FC.f,a:"start"})),
+     o:["A: 중력, B: 부력","A: 부력, B: 중력","A: 마찰력, B: 탄성력","A: 중력, B: 탄성력"],a:0,
+     e:"풍선놀이틀에는 아래로 중력(A), 위로 물이 밀어 올리는 부력(B)이 작용해요. 두 힘이 평형을 이루어 가라앉지 않고 물 위에 떠 있어요. (교과서 153쪽 ‘궁금해’의 답!)"},
+    {q:"그림 A~D는 생활 속에서 힘의 특징을 이용한 예이다. 탄성력을 이용한 것은?",
+     f:()=>{let s="";
+       s+=P("M40,40 h60 v70 q0,25 -25,25 h-35 z","#fde2e4","#e07a5f",2)+[0,1,2].map(i=>[0,1,2].map(j=>C(55+j*16,70+i*16,4,"#9aa5b1","#6b7785",1)).join("")).join("")+lab(70,165,"A")+T(70,185,"아기 양말 바닥 고무",{fs:11,c:FC.s});
+       s+=R(150,60,120,60,"#e5e7eb","#6b7785",8)+[0,1,2].map(i=>[0,1,2,3].map(j=>R(160+j*27,68+i*17,22,13,"#fff","#9aa5b1",2)).join("")).join("")+lab(210,165,"B")+T(210,185,"키보드",{fs:11,c:FC.s});
+       s+=WAT(290,50,140,80)+R(330,60,60,40,"#333","#111",6)+C(360,80,12,"#5aa9e6","#ddd")+R(318,52,84,56,"none","#f4a261",10)+lab(360,165,"C")+T(360,185,"가벼운 물체로 감싼 수중 카메라",{fs:11,c:FC.s});
+       s+=R(470,80,70,18,"#333","#111",4)+[0,1,2,3].map(j=>R(474+j*17,76,10,6,"#777","#777",1)).join("")+L(505,98,505,130,"#6b7785",5)+lab(505,165,"D")+T(505,185,"자전거 페달",{fs:11,c:FC.s});
+       return S(200,s);},
+     o:["A","B","C","D"],a:1,
+     e:"B 키보드 속에는 용수철이 있어서 누른 뒤 손을 떼면 탄성력으로 원래대로 돌아와요. A(양말 고무)와 D(페달)는 마찰력, C(수중 카메라)는 부력을 이용해요."}
+  ]
+};
+
+/* ================= 저장 ================= */
+const TEACHER=/[?&]teacher/.test(location.search); // 주소 끝에 ?teacher → 선생님 모드
+const KEY="force-unit-chunjae-v3"+(TEACHER?"-teacher":"");   // 선생님 모드 기록은 학생 기록과 따로 저장
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+let state=load();
+state.done=state.done||{}; state.page=state.page||0; state.xp=state.xp||0; state.q=state.q||{};
+state.badges=state.badges||{}; state.sims=state.sims||{}; state.stars=state.stars||{}; state.name=state.name||""; state.cls=state.cls||""; state.num=state.num||"";
+if(TEACHER&&!state.name){state.cls="0";state.num="0";state.name="선생님 테스트";}
+
+/* ================= 보상 데이터 ================= */
+const LEVELS=[[0,"힘 새싹","🌱"],[140,"힘 탐험가","🧭"],[300,"힘 연구원","🔬"],[480,"힘 박사","🎓"],[680,"힘 마스터","👑"]];
+const BADGES=[
+  {icon:"🚀",name:"출발!",desc:"힘의 작용 학습을 시작했어요"},
+  {icon:"🏹",name:"화살표 달인",desc:"1-01 힘의 표현과 평형 완료"},
+  {icon:"🍎",name:"뉴턴의 사과",desc:"1-02 중력 완료"},
+  {icon:"🌀",name:"용수철 박사",desc:"1-03 탄성력 완료"},
+  {icon:"🥌",name:"컬링 선수",desc:"1-04 마찰력 완료"},
+  {icon:"🛟",name:"부력 선장",desc:"1-05 부력 완료"},
+  {icon:"⚖️",name:"알짜힘 계산왕",desc:"2-01 알짜힘 완료"},
+  {icon:"🎡",name:"운동 분류 전문가",desc:"2-02 힘과 운동 완료"},
+  {icon:"🚲",name:"생활 속 힘 발명가",desc:"2-03 여러 가지 힘의 이용 완료"},
+  {icon:"🏆",name:"힘의 작용 수료",desc:"종합 평가 완료"}
+];
+const SIM_COUNT=document.querySelectorAll(".sim").length;
+const SPECIAL={
+  sx:{icon:"🔭",name:"탐구왕",desc:`실험 ${SIM_COUNT}개를 모두 해 봤어요`},
+  sp:{icon:"💎",name:"완벽주의자",desc:"종합 평가를 첫 시도에 만점!"},
+  ss:{icon:"🌟",name:"별 수집가",desc:"모든 단계에서 별 3개를 모았어요"},
+  sc:{icon:"🔥",name:"콤보 마스터",desc:"5문제 연속 한 번에 정답"}
+};
+
+/* ================= 보상 함수 ================= */
+const $=id=>document.getElementById(id);
+function levelIdx(xp){let i=0;LEVELS.forEach((l,k)=>{if(xp>=l[0])i=k});return i;}
+function renderStats(){
+  const i=levelIdx(state.xp), L=LEVELS[i], next=LEVELS[i+1];
+  $("lvIcon").textContent=L[2]; $("lvName").textContent=`Lv.${i+1} ${L[1]}`;
+  $("who").textContent=state.name?`· ${fullName()}`:"";
+  const pct=next?Math.round((state.xp-L[0])/(next[0]-L[0])*100):100;
+  $("xpFill").style.width=pct+"%";
+  $("xpText").textContent=next?`${state.xp} XP · 다음 레벨까지 ${next[0]-state.xp}`:`${state.xp} XP · 최고 레벨!`;
+  $("badgeCnt").textContent=Object.keys(state.badges).length;
+}
+function toast(msg,kind){
+  const t=document.createElement("div"); t.className="toast "+(kind||""); t.textContent=msg;
+  $("toasts").appendChild(t); setTimeout(()=>t.classList.add("out"),1800); setTimeout(()=>t.remove(),2300);
+}
+function addXP(n,reason){
+  const before=levelIdx(state.xp); state.xp+=n; save(); renderStats();
+  toast(`+${n} XP  ${reason}`,"xp");
+  const after=levelIdx(state.xp);
+  if(after>before){const L=LEVELS[after];celebrate(L[2],`레벨 업! Lv.${after+1}`,`이제 너는 ‘${L[1]}’이야!`);}
+}
+function starStr(n){return "⭐".repeat(n)+"☆".repeat(3-n);}
+function award(key){
+  if(state.badges[key]) return; state.badges[key]=Date.now(); save(); renderStats();
+  const isL=key.startsWith("b"), idx=isL?+key.slice(1):-1, b=isL?BADGES[idx]:SPECIAL[key];
+  celebrate(b.icon,`새 배지: ${b.name}`,b.desc+(isL&&state.stars[idx]?`<div class="stars">${starStr(state.stars[idx])}</div>`:""));
+}
+const cq=[]; let showing=false;
+function celebrate(icon,title,desc,quiet){cq.push([icon,title,desc,quiet]); if(!showing) nextCele();}
+function nextCele(){
+  const c=cq.shift(); if(!c){showing=false;$("modal").classList.remove("open");return;}
+  showing=true; $("mIcon").textContent=c[0]; $("mTitle").textContent=c[1]; $("mDesc").innerHTML=c[2];
+  $("modal").classList.add("open"); if(!c[3]) confetti();
+}
+$("mOk").onclick=nextCele;
+function confetti(){
+  const colors=["#ffd166","#ef476f","#06d6a0","#118ab2","#7a3fd1","#ff8c42"];
+  for(let i=0;i<70;i++){
+    const p=document.createElement("i"); p.className="confetti";
+    p.style.left=Math.random()*100+"vw"; p.style.background=colors[i%colors.length];
+    p.style.animationDuration=(1.6+Math.random()*1.4)+"s"; p.style.animationDelay=Math.random()*0.3+"s";
+    document.body.appendChild(p);
+  if(window.innerWidth<700){p.classList.add("min");} setTimeout(()=>p.remove(),3400);
+  }
+}
+function renderBadges(){
+  const g=$("badgeGrid"); g.innerHTML="";
+  const add=(key,b,extra)=>{
+    const on=!!state.badges[key], d=document.createElement("div"); d.className="bitem"+(on?"":" off");
+    d.innerHTML=`<div class="bicon">${on?b.icon:"🔒"}</div><b>${b.name}</b><small>${b.desc}</small>${on&&extra?extra:""}`;
+    g.appendChild(d);
+  };
+  BADGES.forEach((b,i)=>add("b"+i,b,state.stars[i]?`<div class="stars">${starStr(state.stars[i])}</div>`:""));
+  Object.entries(SPECIAL).forEach(([k,b])=>add(k,b));
+}
+$("badgeBtn").onclick=()=>{renderBadges();$("badgeModal").classList.add("open");};
+$("bClose").onclick=()=>$("badgeModal").classList.remove("open");
+
+/* ================= 내비게이션 (단계 잠금) ================= */
+const lessons=[...document.querySelectorAll("section.lesson")];
+const LAST=lessons.length-1;
+const nav=$("nav"), navBtns=[];
+const unlocked=i=>true;   // 모든 단계를 자유롭게 열 수 있어요 (순서 잠금 없음)
+lessons.forEach((s,i)=>{
+  if(s.dataset.part){const p=document.createElement("span");p.className="part";p.textContent=s.dataset.part;nav.appendChild(p);}
+  const b=document.createElement("button");
+  b.textContent=s.dataset.title; b.onclick=()=>go(i); nav.appendChild(b); navBtns.push(b);
+});
+function completeLesson(idx,first,total){
+  if(state.done[idx]) return;
+  state.done[idx]=true;
+  if(total){const r=first/total; state.stars[idx]=r>=0.9?3:r>=0.6?2:1;}
+  save(); addXP(idx===0?10:20,"단계 완료 보너스");
+  award("b"+idx);
+  let all=true; for(let k=1;k<=LAST;k++) if(state.stars[k]!==3) all=false;
+  if(all) award("ss");
+  updateBar(); go(state.page,true); report(); renderCert();
+}
+function go(i,stay){
+  i=Math.max(0,Math.min(LAST,i));
+  if(!unlocked(i)){toast("🔒 앞 단계의 확인 문제를 먼저 모두 맞혀야 열려요!","lock");return;}
+  const moved=state.page!==i;
+  state.page=i;
+  lessons.forEach((s,k)=>s.classList.toggle("show",k===i));
+  navBtns.forEach((b,k)=>{
+    b.classList.toggle("active",k===i); b.classList.toggle("done",!!state.done[k]);
+    b.classList.toggle("locked",!unlocked(k));
+  });
+  const nb=$("nextBtn");
+  $("prevBtn").disabled=i===0;
+  nb.disabled=i===LAST;
+  nb.textContent="다음 →";
+  updateBar(); save(); if(moved) report();
+  if(!stay){navBtns[i].scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});window.scrollTo({top:0,behavior:"smooth"});}
+}
+$("prevBtn").onclick=()=>go(state.page-1);
+$("nextBtn").onclick=()=>go(state.page+1);
+function updateBar(){
+  const n=Object.keys(state.done).filter(k=>state.done[k]).length;
+  const p=Math.round(n/lessons.length*100);
+  $("bar").style.width=p+"%";
+  $("barLabel").textContent=`학습 진도 ${p}% (${n}/${lessons.length})`;
+}
+function askReset(){
+  $("rWho").textContent=state.name?`${fullName()} · ${STEP_NAMES[state.page]||""} · ${state.xp} XP`:"";
+  $("rSheet").style.display=SHEET_URL?"":"none";
+  $("resetModal").classList.add("open");
+}
+function doReset(){
+  if(outbox.length){flush();}                         // 아직 못 보낸 기록은 대기열에 남아 나중에 전송돼요
+  try{localStorage.removeItem(KEY)}catch(e){}
+  location.href=location.pathname+location.search;
+}
+$("resetTop").onclick=askReset;
+$("resetBtn").onclick=askReset;
+$("rCancel").onclick=()=>$("resetModal").classList.remove("open");
+$("rOk").onclick=doReset;
+$("resetModal").addEventListener("click",e=>{if(e.target.id==="resetModal")$("resetModal").classList.remove("open");});
+
+/* ================= 시작 버튼 ================= */
+/* 시트가 연결되어 있으면 ‘학번 확인’ 방식, 아니면 반·번호·이름 직접 입력 방식 */
+const SNO_MODE=!!SHEET_URL&&!TEACHER;
+const escH=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("stuCls").value=state.cls; $("stuNum").value=state.num; $("stuName").value=state.name; $("stuSno").value=state.sno||"";
+if(SNO_MODE){
+  $("snoBox").style.display=""; $("manualBox").style.display="none";
+  $("startTitle").textContent="✏️ 학번을 확인하고 출발!";
+  $("startTip").textContent="선생님이 등록한 학번을 입력하고 ‘확인’을 누르면 이름이 나와요. (이름 일부는 *로 가려져요)";
+}
+const goOn=()=>go(Math.min(LAST,Math.max(1,state.page)));
+function lockIdentity(){
+  if(!state.done[0]) return;
+  ["stuCls","stuNum","stuName","stuSno"].forEach(id=>$(id).disabled=true);
+  $("startBtn").textContent="이어서 공부하기 ▶";
+  $("startTip").textContent="다른 학생이 쓰려면 위쪽의 ‘↺ 처음부터’를 누르세요.";
+  if(SNO_MODE){
+    $("snoBtn").style.display="none";
+    $("snoResult").innerHTML=`<div class="who">✅ <b>${escH(fullName())}</b> 학생으로 공부하고 있어요.<div class="rbtns"><button class="btn primary" id="snoGo">이어서 공부하기 ▶</button></div></div>`;
+    $("snoGo").onclick=goOn;
+  }
+}
+function beginStudy(cls,num,name,sno){
+  state.cls=String(cls); state.num=String(num); state.name=name; state.sno=sno||""; state.sid=newSid(); save(); renderStats();
+  completeLesson(0); lockIdentity();
+}
+$("startBtn").onclick=()=>{
+  if(state.done[0]){goOn();return;}
+  const c=$("stuCls").value.trim(), no=$("stuNum").value.trim(), n=$("stuName").value.trim();
+  if(!c||!no||!n){toast("✏️ 반, 번호, 이름을 모두 적어 주세요!","lock");(!c?$("stuCls"):!no?$("stuNum"):$("stuName")).focus();return;}
+  beginStudy(c,no,n,"");
+};
+async function lookupSno(){
+  const v=$("stuSno").value.replace(/\D/g,""), r=$("snoResult");
+  if(!v){r.innerHTML=`<div class="who no">학번을 숫자로 입력해 주세요.</div>`;$("stuSno").focus();return;}
+  r.innerHTML=`<div class="who wait">🔎 선생님 명단에서 찾는 중…</div>`; $("snoBtn").disabled=true;
+  try{
+    const u=SHEET_URL+(SHEET_URL.includes("?")?"&":"?")+"action=lookup&token="+encodeURIComponent(SHEET_TOKEN)+"&sno="+v;
+    const j=await (await fetch(u)).json();
+    if(!j.ok) throw new Error(j.error||"fail");
+    if(!j.found){
+      r.innerHTML=`<div class="who no">❌ <b>${v}</b>은(는) 명단에 없는 학번이에요.<br>다시 확인하거나 선생님께 말씀드려요.</div>`;
+    }else{
+      const label=`${j.cls!==""?j.cls+"반 ":""}${j.num!==""?j.num+"번 ":""}${escH(j.name)}`;
+      r.innerHTML=`<div class="who"><div class="big2">🙋</div><b>${label}</b> 학생 맞나요?
+        <div class="rbtns"><button class="btn ghost" id="snoNo">아니에요</button><button class="btn primary" id="snoYes">네, 시작할게요 🚀</button></div></div>`;
+      $("snoYes").onclick=()=>beginStudy(j.cls,j.num,j.name,v);
+      $("snoNo").onclick=()=>{r.innerHTML="";$("stuSno").value="";$("stuSno").focus();};
+    }
+  }catch(e){
+    r.innerHTML=`<div class="who no">⚠️ 선생님 시트에 연결하지 못했어요.<br>인터넷 연결을 확인하고 다시 ‘확인’을 눌러 주세요.</div>`;
+  }
+  $("snoBtn").disabled=false;
+}
+$("snoBtn").onclick=lookupSno;
+$("stuSno").addEventListener("keydown",e=>{if(e.key==="Enter")lookupSno();});
+function fullName(){return state.cls?`${state.cls}반 ${state.num}번 ${state.name}`:state.name;}
+
+/* ================= 퀴즈 엔진 ================= */
+let combo=0;
+const quizChecks=[];
+document.querySelectorAll(".quiz").forEach(box=>{
+  const id=box.dataset.quiz, list=QUIZ[id], secIdx=lessons.indexOf(box.closest("section"));
+  list.forEach((item,qi)=>{
+    const key=id+"-"+qi;
+    const q=document.createElement("div"); q.className="q"; q.textContent=`Q${qi+1}. ${item.q}`;
+    const fig=document.createElement("div"); fig.className="qfig-wrap"; if(item.f) fig.innerHTML=item.f();
+    const efig=document.createElement("div"); efig.className="qfig-wrap efig";
+    const opts=document.createElement("div"); opts.className="opts";
+    const fb=document.createElement("div"); fb.className="fb";
+    let missed=false; const wrongPicks=[];
+    const finish=msg=>{
+      opts.children[item.a].classList.add("right");
+      [...opts.children].forEach(x=>x.disabled=true);
+      fb.className="fb ok"; fb.textContent=msg+item.e;
+      if(item.ef&&!efig.innerHTML){efig.innerHTML=`<div class="efcap">📐 해설 그림</div>`+item.ef();}
+    };
+    item.o.forEach((t,oi)=>{
+      const b=document.createElement("button"); b.textContent=`${"①②③④⑤"[oi]} ${t}`; if(oi===item.a) b.classList.add("ans");
+      b.onclick=()=>{
+        if(SHEET_URL&&!TEACHER&&!state.done[0]){toast("✏️ 먼저 ‘시작하기’에서 학번을 확인해 주세요!","lock");go(0);setTimeout(()=>$("stuSno").focus(),400);return;}
+        if(oi===item.a){
+          state.q[key]=missed?"retry":"first"; save();
+          finish(missed?"⭕ 다시 도전 성공! ":"⭕ 한 번에 정답! ");
+          report({id:`${state.cls}-${state.num}-${key}-${Date.now()}`,lesson:STEP_NAMES[secIdx],qno:qi+1,question:item.q,result:missed?"재도전 정답":"한 번에 정답",wrongs:wrongPicks.join(" | ")});
+          if(missed){combo=0;addXP(5,"포기하지 않았어요 👏");}
+          else{
+            combo++; addXP(10,"정답!");
+            if([3,5,10].includes(combo)) toast(`🔥 ${combo}연속 정답!`,"combo");
+            if(combo===3) addXP(5,"3연속 콤보 보너스");
+            if(combo>=5) award("sc");
+          }
+          check();
+        }else{
+          b.classList.add("wrong"); b.disabled=true; missed=true; combo=0; wrongPicks.push(`${"①②③④⑤"[oi]} ${t}`);
+          fb.className="fb no"; fb.textContent="❌ 다시 생각해 보세요. 힌트: 그림을 한 번 더 살펴보고, 위의 노란 개념 상자도 다시 읽어 봐요! (다시 맞히면 +5 XP)";
+        }
+      };
+      opts.appendChild(b);
+    });
+    if(state.q[key]) finish(state.q[key]==="first"?"⭕ 한 번에 맞힌 문제예요. ":"⭕ 다시 도전해서 맞힌 문제예요. ");
+    const wrap=document.createElement("div"); wrap.className="qitem";
+    wrap.append(q,fig,opts,fb,efig); box.appendChild(wrap);
+  });
+  let msgShown=false;
+  function check(){
+    const keys=list.map((_,qi)=>id+"-"+qi);
+    if(!keys.every(k=>state.q[k])) return;
+    const first=keys.filter(k=>state.q[k]==="first").length;
+    completeLesson(secIdx,first,list.length);
+    if(id==="final") showFinal(first,list.length);
+    else if(!msgShown){
+      msgShown=true;
+      const m=document.createElement("div"); m.className="fb ok"; m.style.marginTop="14px";
+      m.innerHTML=`🎉 이 단계 완료! 획득한 별 <span class="stars">${starStr(state.stars[secIdx]||1)}</span><br>‘다음 →’ 버튼을 눌러 계속해요.`;
+      box.appendChild(m);
+    }
+  }
+  quizChecks.push(check);
+});
+
+
+/* ================= 구글 시트로 기록 보내기 ================= */
+const OUTKEY=KEY+"-outbox";
+let outbox=[]; try{outbox=JSON.parse(localStorage.getItem(OUTKEY))||[]}catch(e){outbox=[]}
+let syncErr="";
+function saveOut(){try{localStorage.setItem(OUTKEY,JSON.stringify(outbox))}catch(e){}}
+function snapshot(){
+  const done=Object.keys(state.done).filter(k=>state.done[k]).map(Number);
+  const qs=Object.values(state.q), li=levelIdx(state.xp);
+  const fk=QUIZ.final.map((_,i)=>"final-"+i);
+  const finalScore=fk.every(k=>state.q[k])?Math.round(fk.filter(k=>state.q[k]==="first").length/fk.length*100):null;
+  return {page:state.page,done,stars:state.stars,xp:state.xp,level:`Lv.${li+1} ${LEVELS[li][1]}`,
+    badges:Object.keys(state.badges).length,first:qs.filter(v=>v==="first").length,retry:qs.filter(v=>v==="retry").length,finalScore};
+}
+function report(answer){
+  if(!SHEET_URL||(TEACHER&&!state.tSend)||!state.name||!state.done[0]) return;
+  if(!answer) outbox=outbox.filter(x=>x.answer);           // 상태 기록은 가장 최근 것만 남김
+  if(!state.sid){state.sid=newSid();save();}             // 예전에 시작한 학생도 학생ID를 받아요
+  outbox.push({token:SHEET_TOKEN,student:{cls:state.cls,num:state.num,name:state.name,sid:state.sid,sno:state.sno||""},snap:snapshot(),answer:answer||null});
+  if(outbox.length>400) outbox=outbox.slice(-400);
+  saveOut(); flush();
+}
+let flushing=false;
+async function flush(){
+  if(flushing||!SHEET_URL||!outbox.length){renderSync();return;}
+  flushing=true; renderSync();
+  while(outbox.length){
+    const body=JSON.stringify(outbox[0]);
+    let sent=false;
+    try{
+      const res=await fetch(SHEET_URL,{method:"POST",body});   // text/plain → 미리 확인 요청 없이 전송
+      const j=await res.json();
+      if(j.ok){sent=true;syncErr="";}
+      else if(j.error==="reset"){flushing=false;serverReset();return;}
+      else if(j.error==="token"){syncErr="⚠️ 토큰 불일치";sent=true;}
+      else if(j.error==="bad data"||j.error==="bad json"){sent=true;}
+    }catch(e){
+      try{await fetch(SHEET_URL,{method:"POST",mode:"no-cors",body});sent=true;}catch(e2){}   // 응답을 못 읽는 환경 대비
+    }
+    if(!sent) break;
+    outbox.shift(); saveOut();
+  }
+  flushing=false; renderSync();
+}
+function renderSync(){
+  const s=$("sync"); if(!s) return;
+  if(!SHEET_URL||!state.name||(TEACHER&&!state.tSend)){s.textContent=TEACHER?"☁️ 시트로 보내지 않음(선생님 모드)":"";return;}
+  s.textContent=syncErr||(outbox.length?`☁️ 보내는 중… (${outbox.length})`:"☁️ 선생님께 기록 저장됨");
+}
+setInterval(flush,30000);
+
+/* ----- 선생님이 시트에서 이 학생 줄을 지웠는지 확인 → 지웠으면 이 화면도 초기화 ----- */
+function newSid(){
+  try{if(crypto.randomUUID) return crypto.randomUUID();}catch(e){}
+  return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+}
+let checking=false;
+async function checkReset(){
+  if(checking||!SHEET_URL||!state.sid||!state.done[0]) return;
+  checking=true;
+  try{
+    const u=SHEET_URL+(SHEET_URL.includes("?")?"&":"?")+"action=check&token="+encodeURIComponent(SHEET_TOKEN)+"&sid="+encodeURIComponent(state.sid);
+    const j=await (await fetch(u)).json();
+    if(j.ok&&j.reset) serverReset();
+  }catch(e){}            // 인터넷이 끊겼거나 응답을 못 읽으면 다음에 다시 확인해요
+  checking=false;
+}
+function serverReset(){
+  outbox=outbox.filter(x=>!(x.student&&x.student.sid===state.sid)); saveOut();
+  try{localStorage.removeItem(KEY);sessionStorage.setItem("force-reset-notice","1");}catch(e){}
+  location.href=location.pathname+location.search;
+}
+setInterval(checkReset,60000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible") checkReset();});
+window.addEventListener("online",flush);
+
+/* ================= 종합 결과 & 수료증 ================= */
+function showFinal(first,total){
+  const s=Math.round(first/total*100), el=$("finalScore");
+  el.style.display="block";
+  el.textContent=`첫 시도 정답 ${first}/${total} · ${s}점 `+(s>=90?"🏆 완벽해요!":s>=70?"👍 잘했어요! 틀린 부분만 복습해요.":"📖 앞 단계를 다시 복습해 봐요.");
+  if(first===total) award("sp");
+  renderCert();
+}
+function renderCert(){
+  const fk=QUIZ.final.map((_,i)=>"final-"+i);
+  if(!fk.every(k=>state.q[k])) return;                     // 종합 평가를 끝내야 수료증 칸이 보여요
+  const first=fk.filter(k=>state.q[k]==="first").length, total=fk.length, s=Math.round(first/total*100);
+  const remain=[];
+  for(let k=1;k<LAST;k++) if(!state.done[k]) remain.push(k);
+  const c=$("cert"); c.style.display="block";
+  if(remain.length){
+    c.innerHTML=`<div class="card" style="text-align:center;border:2px dashed #b8860b;background:#fffdf5">
+      <h3>📜 수료증까지 ${remain.length}단계 남았어요!</h3>
+      <p class="tip">아직 확인 문제를 다 풀지 않은 단계예요. 눌러서 바로 가 보세요.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">${remain.map(k=>`<button class="btn ghost" onclick="go(${k})">${STEP_NAMES[k]}</button>`).join("")}</div></div>`;
+    return;
+  }
+  const li=levelIdx(state.xp), L=LEVELS[li];
+  const icons=[...BADGES.map((b,i)=>state.badges["b"+i]?b.icon:""),...Object.entries(SPECIAL).map(([k,b])=>state.badges[k]?b.icon:"")].join(" ");
+  const d=new Date(), date=`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+  const name=(fullName()||"학생").replace(/[<>&"]/g,"");
+  c.innerHTML=`
+    <div class="cert-in">
+      <div class="cert-top">수 료 증</div>
+      <div class="cert-name">${name}</div>
+      <p>위 학생은 중학교 과학 <b>‘Ⅴ. 힘의 작용’</b> 단원의<br>모든 단계를 끝까지 공부하였기에 이 증서를 드립니다.</p>
+      <table>
+        <tr><th>종합 평가</th><td>${s}점 (첫 시도 ${first}/${total})</td></tr>
+        <tr><th>최종 레벨</th><td>${L[2]} Lv.${li+1} ${L[1]} · ${state.xp} XP</td></tr>
+        <tr><th>모은 배지</th><td style="font-size:1.4rem">${icons}</td></tr>
+      </table>
+      <div class="cert-date">${date}</div>
+    </div>
+    <div class="noprint" style="text-align:center;margin-top:12px"><button class="btn primary" onclick="window.print()">🖨 수료증 인쇄 / PDF 저장</button></div>`;
+}
+
+/* ================= SVG 도우미 ================= */
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;return e;}
+function marker(svg,color){
+  const id="m"+svg.id+color.replace(/[^a-z0-9]/gi,"");
+  if(!svg.querySelector("#"+id)){
+    let defs=svg.querySelector("defs"); if(!defs){defs=el("defs",{});svg.insertBefore(defs,svg.firstChild);}
+    const m=el("marker",{id,viewBox:"0 0 10 10",refX:"8",refY:"5",markerWidth:"4",markerHeight:"4",orient:"auto-start-reverse"});
+    m.appendChild(el("path",{d:"M0,0 L10,5 L0,10 z",fill:color})); defs.appendChild(m);
+  }
+  return id;
+}
+function arrow(svg,x1,y1,x2,y2,color,w=6){
+  if(Math.hypot(x2-x1,y2-y1)<1) return null;
+  const l=el("line",{x1,y1,x2,y2,stroke:color,"stroke-width":w,"marker-end":`url(#${marker(svg,color)})`,"stroke-linecap":"round"});
+  svg.appendChild(l); return l;
+}
+function clear(svg){[...svg.childNodes].forEach(n=>{if(n.nodeName!=="defs")svg.removeChild(n)});}
+function segInit(id,cb){
+  document.querySelectorAll(`#${id} button`).forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(`#${id} button`).forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b);
+  }));
+}
+const txt=(svg,x,y,s,attrs)=>svg.appendChild(el("text",Object.assign({x,y,"font-size":14,fill:"#1f2933"},attrs||{}),s));
+
+/* ===== 1-01 화살표 ===== */
+let arD="r";
+segInit("arDir",b=>{arD=b.dataset.d;drawArrow();});
+$("arMag").oninput=drawArrow;
+function drawArrow(){
+  const svg=$("arrowSvg"); clear(svg);
+  const mag=+$("arMag").value, U=30;
+  $("arMagV").textContent=mag+" N";
+  for(let x=0;x<=600;x+=U) svg.appendChild(el("line",{x1:x,y1:0,x2:x,y2:260,stroke:"#eef1f6"}));
+  for(let y=0;y<=260;y+=U) svg.appendChild(el("line",{x1:0,y1:y,x2:600,y2:y,stroke:"#eef1f6"}));
+  const cx=300,cy=120;
+  svg.appendChild(el("rect",{x:cx-50,y:cy-30,width:100,height:60,rx:6,fill:"#f4d9a6",stroke:"#b58340","stroke-width":2}));
+  svg.appendChild(el("circle",{cx:cx-28,cy:cy+40,r:11,fill:"#555"}));svg.appendChild(el("circle",{cx:cx+28,cy:cy+40,r:11,fill:"#555"}));
+  txt(svg,cx,cy+6,"수레",{"text-anchor":"middle",fill:"#6b4a1f"});
+  let sx=cx,sy=cy,dx=0,dy=0;
+  if(arD==="r"){sx=cx+50;dx=1}if(arD==="l"){sx=cx-50;dx=-1}if(arD==="u"){sy=cy-30;dy=-1}if(arD==="d"){sy=cy+30;dy=1}
+  arrow(svg,sx,sy,sx+dx*mag*U,sy+dy*mag*U,"#2f6fde",6);
+  svg.appendChild(el("circle",{cx:sx,cy:sy,r:7,fill:"#e0561f"}));
+  txt(svg,sx+10,sy-12,"작용점",{fill:"#e0561f","font-size":13});
+  const dn={r:"오른쪽",l:"왼쪽",u:"위쪽",d:"아래쪽"}[arD];
+  $("arOut").innerHTML=`🔴 작용점: 수레의 ${dn} 면 &nbsp;|&nbsp; ➡ 방향: ${dn} &nbsp;|&nbsp; 📏 크기: ${mag} N (화살표 ${mag}칸)`;
+}
+
+/* ===== 1-02 중력 ===== */
+$("gm").oninput=drawG;
+segInit("gPreset",b=>{$("gm").value=b.dataset.g;drawG();});
+function drawG(){
+  const g=Math.max(0,+$("gm").value||0), kg=g/1000, svg=$("gSvg"); clear(svg);
+  const places=[["지구",1,"#3b82c4"],["달 (약 1/6)",1/6,"#9aa3ad"],["화성 (약 0.38배)",0.38,"#c8643b"]];
+  places.forEach((p,i)=>{
+    const y=18+i*42, val=kg*9.8*p[1], len=p[1]*360;
+    txt(svg,10,y+18,p[0],{"font-size":13});
+    svg.appendChild(el("rect",{x:135,y,width:len,height:26,rx:5,fill:p[2]}));
+    txt(svg,143+len,y+18,(val<10?val.toFixed(2):val.toFixed(1))+" N",{"font-weight":"bold"});
+  });
+  const show=g>=1000?`${(kg).toLocaleString()} kg`:`${g} g`;
+  $("gOut").innerHTML=`질량 <b>${show}</b> → 어디서나 그대로! &nbsp;|&nbsp; 무게: 지구 <b style="color:#3b82c4">${(kg*9.8).toFixed(2)} N</b>, 달 <b style="color:#6b7280">${(kg*9.8/6).toFixed(2)} N</b>`;
+}
+
+/* ===== 1-03 탄성력 ===== */
+$("spN").oninput=drawSp;
+function drawSp(){
+  const n=+$("spN").value, svg=$("spSvg"); clear(svg);
+  $("spNv").textContent=n+"개";
+  const top=30, L0=100, ext=n*2, scale=10, L=L0+ext*scale, x=170;
+  svg.appendChild(el("rect",{x:x-60,y:10,width:120,height:20,fill:"#888"}));
+  let d=`M${x},${top} `; const coils=12;
+  for(let i=1;i<=coils;i++){const y=top+L*i/coils;d+=`L${x+(i%2?18:-18)},${y-L/coils/2} L${x},${y} `;}
+  svg.appendChild(el("path",{d,fill:"none",stroke:"#555","stroke-width":3}));
+  for(let i=0;i<n;i++) svg.appendChild(el("rect",{x:x-22,y:top+L+i*16,width:44,height:14,rx:3,fill:"#c08a3e",stroke:"#7a5420"}));
+  const rx=285;
+  svg.appendChild(el("rect",{x:rx,y:top+L0-5,width:34,height:115,fill:"#fff7d6",stroke:"#c9b26b"}));
+  for(let c=0;c<=10;c++){const y=top+L0+c*scale;svg.appendChild(el("line",{x1:rx,y1:y,x2:rx+(c%2?9:16),y2:y,stroke:"#7a6a2b"}));if(c%2===0)txt(svg,rx+38,y+4,c+"cm",{"font-size":11,fill:"#7a6a2b"});}
+  txt(svg,rx-4,top+L0-10,"원래 길이",{"font-size":11,"text-anchor":"end",fill:"#7a6a2b"});
+  svg.appendChild(el("line",{x1:x,y1:top+L,x2:rx,y2:top+L,stroke:"#e0561f","stroke-dasharray":"4 3"}));
+  if(n>0){
+    arrow(svg,x+50,top+L+4,x+50,top+L+4+n*14,"#2f6fde",5);
+    txt(svg,x+64,top+L+26,`추가 당기는 힘 ${n}N`,{"font-size":12,fill:"#2f6fde"});
+    arrow(svg,x-50,top+L+4+n*14,x-50,top+L+4,"#1f9d6b",5);
+    txt(svg,x-64,top+L+26,`탄성력 ${n}N`,{"font-size":12,fill:"#1f9d6b","text-anchor":"end"});
+  }
+  // 그래프: 가로 = 늘어난 길이, 세로 = 탄성력 (교과서 그림 9)
+  const gx=400,gy=270,sx=17,sy=40;
+  svg.appendChild(el("line",{x1:gx,y1:gy,x2:gx+180,y2:gy,stroke:"#333"}));
+  svg.appendChild(el("line",{x1:gx,y1:gy,x2:gx,y2:gy-215,stroke:"#333"}));
+  for(let c=2;c<=10;c+=2){txt(svg,gx+c*sx,gy+15,c,{"font-size":10,"text-anchor":"middle"});}
+  for(let f=1;f<=5;f++){txt(svg,gx-6,gy-f*sy+4,f,{"font-size":10,"text-anchor":"end"});svg.appendChild(el("line",{x1:gx,y1:gy-f*sy,x2:gx+180,y2:gy-f*sy,stroke:"#f0f0f0"}));}
+  txt(svg,gx+180,gy+30,"늘어난 길이(cm)",{"font-size":11,"text-anchor":"end"});
+  txt(svg,gx-4,gy-222,"탄성력(N)",{"font-size":11});
+  if(n>0) svg.appendChild(el("line",{x1:gx,y1:gy,x2:gx+ext*sx,y2:gy-n*sy,stroke:"#2f6fde","stroke-width":2.5}));
+  for(let i=0;i<=n;i++) svg.appendChild(el("circle",{cx:gx+i*2*sx,cy:gy-i*sy,r:4,fill:"#2f6fde"}));
+  $("spOut").innerHTML=`용수철이 늘어난 길이 <b>${ext} cm</b> → 탄성력 <b>${n} N</b> (추가 당기는 힘과 크기가 같고 방향이 반대 → 힘의 평형)<br>📈 늘어난 길이가 2배, 3배가 되면 탄성력도 2배, 3배 → <b>비례</b>`;
+}
+
+/* ===== 1-04 마찰력 ===== */
+let mu=0.35, surfName="실험대(나무)";
+segInit("frSurf",b=>{mu=+b.dataset.s;surfName=b.textContent;drawFr();});
+$("frN").oninput=drawFr;
+function drawFr(){
+  const n=+$("frN").value, svg=$("frSvg"); clear(svg);
+  $("frNv").textContent=n+"개";
+  const W=n*2, F=+(mu*W).toFixed(1);
+  const fill={"유리판":"#d8f0fb","실험대(나무)":"#e7c99a","사포":"#b9a88c"}[surfName];
+  svg.appendChild(el("rect",{x:20,y:150,width:560,height:30,fill}));
+  if(surfName==="사포") for(let i=24;i<580;i+=8) svg.appendChild(el("circle",{cx:i,cy:152,r:2,fill:"#7d6d55"}));
+  const bx=230;
+  for(let i=0;i<n;i++) svg.appendChild(el("rect",{x:bx,y:150-(i+1)*34,width:90,height:32,rx:3,fill:"#d9a35b",stroke:"#8a5a1f"}));
+  svg.appendChild(el("rect",{x:bx+90+F*45+14,y:122,width:60,height:20,rx:4,fill:"#eee",stroke:"#777"}));
+  txt(svg,bx+90+F*45+44,137,F+"N",{"font-size":12,"text-anchor":"middle","font-weight":"bold"});
+  arrow(svg,bx+90,133,bx+90+F*45+10,133,"#2f6fde",6);
+  txt(svg,bx+100,118,`당기는 힘 ${F} N`,{"font-size":13,fill:"#2f6fde"});
+  arrow(svg,bx,146,bx-F*45-10,146,"#d64545",6);
+  txt(svg,bx-10,202,`마찰력 ${F} N`,{"font-size":13,fill:"#d64545","text-anchor":"end"});
+  txt(svg,300,24,"→ 움직이려는 방향",{"text-anchor":"middle",fill:"#52606d"});
+  $("frOut").innerHTML=`바닥면: <b>${surfName}</b> · 나무 도막 ${n}개 (무게 ${W} N) → 용수철저울 눈금 = 마찰력 <b style="color:#d64545">${F} N</b><br>방향: 움직이려는 방향(오른쪽)과 <b>반대(왼쪽)</b>`;
+}
+
+/* ===== 1-05 부력 ===== */
+$("byN").oninput=drawBy;
+function drawBy(){
+  const n=+$("byN").value, svg=$("bySvg"); clear(svg);
+  $("byNv").textContent=n+"개";
+  const val=+(3.9-0.1*n).toFixed(1), B=+(0.1*n).toFixed(1), vol=150+10*n;
+  const cx=300, wh=24, surf=185-n*3;
+  // 힘 센서
+  svg.appendChild(el("rect",{x:cx-40,y:8,width:80,height:46,rx:8,fill:"#2b2d42"}));
+  svg.appendChild(el("rect",{x:cx-32,y:16,width:64,height:24,rx:4,fill:"#bde0fe"}));
+  txt(svg,cx,34,val.toFixed(1)+" N",{"text-anchor":"middle","font-weight":"bold"});
+  txt(svg,cx+48,32,"힘 센서",{"font-size":12,fill:"#52606d"});
+  // 추 위치: 아래에서 n개가 수면 아래
+  const stackBottom=surf+n*wh, stackTop=stackBottom-4*wh;
+  svg.appendChild(el("line",{x1:cx,y1:54,x2:cx,y2:stackTop,stroke:"#444","stroke-width":2}));
+  // 눈금실린더
+  svg.appendChild(el("rect",{x:cx-45,y:surf,width:90,height:320-surf,fill:"#bfe3f7",opacity:.85}));
+  svg.appendChild(el("path",{d:`M${cx-46},120 V320 H${cx+46} V120`,fill:"none",stroke:"#7a8a99","stroke-width":3}));
+  for(let i=0;i<4;i++) svg.appendChild(el("rect",{x:cx-18,y:stackTop+i*wh+1,width:36,height:wh-2,rx:4,fill:"#9aa5b1",stroke:"#4a5568"}));
+  txt(svg,cx+56,surf+4,`${vol} mL`,{"font-size":12,fill:"#1d6fa5","font-weight":"bold"});
+  svg.appendChild(el("line",{x1:cx+46,y1:surf,x2:cx+54,y2:surf,stroke:"#1d6fa5"}));
+  if(B>0){arrow(svg,cx-80,stackBottom,cx-80,stackBottom-B*200,"#1f9d6b",5);txt(svg,cx-96,stackBottom-10,`부력 ${B.toFixed(1)} N`,{"font-size":13,fill:"#1f9d6b","text-anchor":"end"});}
+  // 표
+  const rows=[["잠기기 전","3.9"],["2개 잠김","3.7"],["4개 잠김","3.5"]];
+  rows.forEach((r,i)=>{const on=(i===0&&n===0)||(i===1&&n===2)||(i===2&&n===4);
+    svg.appendChild(el("rect",{x:440,y:120+i*30,width:140,height:26,rx:5,fill:on?"#e3f5ed":"#f6f6f6",stroke:on?"#1f9d6b":"#ddd"}));
+    txt(svg,450,138+i*30,`${r[0]}: ${r[1]} N`,{"font-size":13});});
+  txt(svg,440,110,"교과서 측정값",{"font-size":12,fill:"#52606d"});
+  $("byOut").innerHTML=`부력 = 잠기기 전 3.9 N − 지금 ${val.toFixed(1)} N = <b style="color:#1f9d6b">${B.toFixed(1)} N</b> &nbsp;|&nbsp; 물 높이 ${vol} mL (잠긴 부피 ${vol-150} mL)<br>잠긴 부피가 클수록 → 부력이 커지고 → 힘 센서 값은 작아져요.`;
+}
+
+/* ===== 2-01 알짜힘 ===== */
+let f2d="opp";
+segInit("f2dir",b=>{f2d=b.dataset.d;drawNet();});
+["f1","f2"].forEach(id=>$(id).oninput=drawNet);
+function drawNet(){
+  const svg=$("netSvg"); clear(svg);
+  const F1=+$("f1").value,F2=+$("f2").value,U=22;
+  $("f1v").textContent=F1+" N"; $("f2v").textContent=F2+" N";
+  const net=f2d==="same"?F1+F2:F1-F2;
+  const cx=300,cy=90;
+  svg.appendChild(el("line",{x1:0,y1:cy+32,x2:600,y2:cy+32,stroke:"#ccc","stroke-width":2}));
+  svg.appendChild(el("rect",{x:cx-30,y:cy-28,width:60,height:60,rx:6,fill:"#dfe7f2",stroke:"#6b7f99","stroke-width":2}));
+  arrow(svg,cx+30,cy-8,cx+30+F1*U,cy-8,"#2f6fde",6);
+  if(F1) txt(svg,cx+36+F1*U,cy-14,`힘1=${F1}N`,{fill:"#2f6fde"});
+  if(f2d==="opp"){arrow(svg,cx-30,cy+12,cx-30-F2*U,cy+12,"#e0561f",6);if(F2)txt(svg,cx-34-F2*U,cy+32,`힘2=${F2}N`,{fill:"#e0561f","text-anchor":"end"});}
+  else{arrow(svg,cx+30,cy+14,cx+30+F2*U,cy+14,"#e0561f",6);if(F2)txt(svg,cx+36+F2*U,cy+34,`힘2=${F2}N`,{fill:"#e0561f"});}
+  txt(svg,20,190,"알짜힘",{fill:"#7a3fd1","font-weight":"bold"});
+  if(net!==0) arrow(svg,cx,190,cx+net*U*0.6,190,"#7a3fd1",8);
+  else txt(svg,cx,196,"0  ⚖ 힘의 평형!",{"text-anchor":"middle","font-size":18,fill:"#1f9d6b","font-weight":"bold"});
+  const dir=net>0?"오른쪽":"왼쪽";
+  const how=f2d==="same"?`같은 방향 → 두 힘의 합: ${F1} + ${F2} = ${F1+F2} N`:`반대 방향 → 두 힘의 차: ${Math.max(F1,F2)} − ${Math.min(F1,F2)} = ${Math.abs(F1-F2)} N`;
+  $("netOut").innerHTML=`${how}<br>`+(net===0?(F1===0&&F2===0?"힘이 작용하지 않아요.":"✅ 알짜힘 0 → <span style='color:#1f9d6b'>힘의 평형</span>: 정지한 물체는 계속 정지, 운동하던 물체는 일정하게 운동"):`알짜힘: <span style="color:#7a3fd1">${Math.abs(net)} N, ${dir}</span> (더 큰 힘의 방향)`);
+}
+
+/* ===== 2-02 힘과 운동 (애니메이션) ===== */
+let mvMode="same", mvRaf=null;
+const MV_TEXT={
+  zero:"알짜힘 0 → 흐린 공의 간격이 일정해요. <b>속력과 운동 방향이 변하지 않아요</b> (예: 무빙워크)",
+  same:"운동 방향과 알짜힘의 방향이 같음 → 간격이 점점 넓어져요. <b>속력이 점점 증가</b> (예: 낙하 놀이 기구)",
+  opp:"운동 방향과 알짜힘의 방향이 반대 → 간격이 점점 좁아져요. <b>속력이 점점 감소</b>",
+  perp:"알짜힘이 운동 방향과 항상 수직 → 간격은 일정하고 방향만 바뀌어요. <b>운동 방향만 변함</b> (예: 대관람차, 회전목마)",
+  obl:"알짜힘이 운동 방향과 비스듬함 → 간격도 방향도 바뀌어요. <b>속력과 운동 방향이 모두 변함</b> (예: 그네, 쳐 낸 야구공)"
+};
+segInit("mvDir",b=>{mvMode=b.dataset.m;mvStatic();});
+function mvStatic(){
+  cancelAnimationFrame(mvRaf);
+  const svg=$("mvSvg"); clear(svg);
+  const y0=mvMode==="perp"?230:110;
+  svg.appendChild(el("rect",{x:2,y:2,width:596,height:296,rx:10,fill:"#e9f7ec"}));
+  svg.appendChild(el("circle",{cx:70,cy:y0,r:12,fill:"#fff",stroke:"#e0561f","stroke-width":3}));
+  arrow(svg,70,y0-26,120,y0-26,"#52606d",3); txt(svg,124,y0-22,"운동 방향",{"font-size":12,fill:"#52606d"});
+  $("mvOut").innerHTML="‘▶ 탁구공 굴리기’를 눌러 보세요.";
+}
+$("mvBtn").onclick=()=>{
+  cancelAnimationFrame(mvRaf);
+  const svg=$("mvSvg"); clear(svg);
+  svg.appendChild(el("rect",{x:2,y:2,width:596,height:296,rx:10,fill:"#e9f7ec"}));
+  const mode=mvMode, T=mode==="perp"?5:3.2, S0=60;
+  let x=70, y=mode==="perp"?230:110, vx=S0, vy=0, t=0, last=null, nextDot=0;
+  const mid=marker(svg,"#7a3fd1");
+  const fl=el("line",{stroke:"#7a3fd1","stroke-width":5,"marker-end":`url(#${mid})`,"stroke-linecap":"round"});
+  const ball=el("circle",{r:12,fill:"#fff",stroke:"#e0561f","stroke-width":3});
+  svg.appendChild(fl); svg.appendChild(ball);
+  const step=ts=>{
+    if(last===null) last=ts;
+    const dt=Math.min(0.05,(ts-last)/1000); last=ts; t+=dt;
+    let sp=Math.hypot(vx,vy), ax=0, ay=0;
+    if(mode==="same"&&sp>0){ax=35*vx/sp;ay=35*vy/sp;}
+    if(mode==="opp"&&sp>2){ax=-18*vx/sp;ay=-18*vy/sp;}
+    if(mode==="perp"){const w=2*Math.PI/T;ax=w*vy;ay=-w*vx;}
+    if(mode==="obl"){ax=15;ay=30;}
+    vx+=ax*dt; vy+=ay*dt;
+    if(mode==="perp"){const s=Math.hypot(vx,vy);vx*=S0/s;vy*=S0/s;}
+    if(mode==="opp"&&Math.hypot(vx,vy)<=2){vx=0;vy=0;}
+    x+=vx*dt; y+=vy*dt;
+    if(t>=nextDot){svg.insertBefore(el("circle",{cx:x,cy:y,r:10,fill:"#e0561f",opacity:.22}),fl);nextDot+=0.3;}
+    ball.setAttribute("cx",x); ball.setAttribute("cy",y);
+    const am=Math.hypot(ax,ay);
+    if(am>0.1){fl.setAttribute("x1",x);fl.setAttribute("y1",y);fl.setAttribute("x2",x+ax/am*42);fl.setAttribute("y2",y+ay/am*42);fl.style.display="";}
+    else fl.style.display="none";
+    sp=Math.hypot(vx,vy);
+    $("mvOut").innerHTML=`속력: <b>${sp.toFixed(0)}</b> (처음 ${S0}) &nbsp;·&nbsp; 진행 중…`;
+    if(t<T&&x<585&&y<290&&y>10) mvRaf=requestAnimationFrame(step);
+    else $("mvOut").innerHTML=`속력: 처음 ${S0} → 나중 <b>${sp.toFixed(0)}</b><br>`+MV_TEXT[mode];
+  };
+  mvRaf=requestAnimationFrame(step);
+};
+
+/* ===== 2-03 장난감 잠수함 ===== */
+let subY=null, subRaf=null;
+$("subP").oninput=()=>{$("subPv").textContent=$("subP").value+"%";subAnim();};
+function subTarget(){const p=+$("subP").value/100;return (2.0>3.0-1.6*p)?62:178;}
+function subAnim(){
+  cancelAnimationFrame(subRaf);
+  const tgt=subTarget();
+  if(subY===null) subY=tgt;
+  const f=()=>{subY+=(tgt-subY)*0.08; drawSub(); if(Math.abs(tgt-subY)>0.5) subRaf=requestAnimationFrame(f); else {subY=tgt;drawSub();}};
+  f();
+}
+function drawSub(){
+  const p=+$("subP").value/100, W=+(3.0-1.6*p).toFixed(2), B=2.0, svg=$("subSvg"); clear(svg);
+  svg.appendChild(el("rect",{x:110,y:40,width:300,height:250,fill:"none",stroke:"#7a8a99","stroke-width":3}));
+  svg.appendChild(el("rect",{x:112,y:80,width:296,height:208,fill:"#bfe3f7",opacity:.8}));
+  const bx=225, by=subY, bw=70, bh=100;
+  // 집기병
+  svg.appendChild(el("rect",{x:bx,y:by,width:bw,height:bh,rx:10,fill:"rgba(255,255,255,.35)",stroke:"#4a5568","stroke-width":2}));
+  const waterH=(bh-8)*(1-p*0.85);
+  svg.appendChild(el("rect",{x:bx+3,y:by+bh-3-waterH,width:bw-6,height:waterH,rx:6,fill:"#5aa9e6",opacity:.8}));
+  svg.appendChild(el("ellipse",{cx:bx+bw/2,cy:by+22+p*18,rx:6+p*24,ry:6+p*20,fill:"#ff6b9a",opacity:.9}));
+  svg.appendChild(el("rect",{x:bx+22,y:by-10,width:26,height:12,fill:"#8d6e63"}));
+  // 고무관
+  svg.appendChild(el("path",{d:`M${bx+35},${by-10} C${bx+35},20 480,20 500,60`,fill:"none",stroke:"#333","stroke-width":3}));
+  svg.appendChild(el("rect",{x:485,y:60,width:36,height:60,rx:6,fill:"#f4a261",stroke:"#9c5a22"}));
+  txt(svg,503,138,"공기 펌프",{"font-size":12,"text-anchor":"middle"});
+  // 힘 화살표
+  arrow(svg,bx-22,by+bh/2,bx-22,by+bh/2+W*30,"#2f6fde",5); txt(svg,bx-42,by+bh/2+W*30,`무게 ${W.toFixed(1)}N`,{"font-size":12,fill:"#2f6fde","text-anchor":"end"});
+  arrow(svg,bx+bw+25,by+bh/2,bx+bw+25,by+bh/2-B*30,"#1f9d6b",5); txt(svg,bx+bw+42,by+bh/2-B*30+14,`부력 ${B.toFixed(1)}N`,{"font-size":12,fill:"#1f9d6b"});
+  const up=B>W;
+  $("subOut").innerHTML=up?`풍선이 부풀어 물이 빠져나감 → 무게 ${W.toFixed(1)} N &lt; 부력 ${B.toFixed(1)} N → <b style="color:#1f9d6b">떠오른다!</b>`
+                          :`집기병 속에 물이 많음 → 무게 ${W.toFixed(1)} N &gt; 부력 ${B.toFixed(1)} N → <b style="color:#2f6fde">가라앉는다</b>`;
+}
+
+/* ===== 2-03 힘의 이용 분류 게임 ===== */
+const USES=[
+  ["아기 양말 바닥에 마찰력이 큰 고무를 붙인다","마찰력"],
+  ["수중 카메라를 부피가 크고 가벼운 물체로 감싼다","부력"],
+  ["키보드를 눌렀다 떼면 원래대로 되돌아온다","탄성력"],
+  ["자전거 바퀴의 홈 모양을 용도에 따라 다르게 만든다","마찰력"],
+  ["자전거 안장 아래에 용수철을 달아 충격을 흡수한다","탄성력"],
+  ["병따개 손잡이에 고무를 붙인다","마찰력"],
+  ["볼펜 속 용수철로 볼펜심이 다시 들어간다","탄성력"],
+  ["물놀이 튜브를 타고 물 위에 뜬다","부력"],
+  ["누르는 가위: 손을 떼면 처음 모양으로 되돌아간다","탄성력"]
+];
+(function(){
+  const box=$("useGame"); let ok=0;
+  USES.forEach(([t,a])=>{
+    const r=document.createElement("div"); r.className="urow";
+    r.innerHTML=`<span class="ut">${t}</span>`;
+    ["탄성력","마찰력","부력"].forEach(f=>{
+      const b=document.createElement("button"); b.textContent=f;
+      b.onclick=()=>{
+        if(r.classList.contains("ok")) return;
+        if(f===a){r.classList.add("ok");b.classList.add("right");ok++;$("useOut").textContent=`${ok} / ${USES.length} 맞힘`+(ok===USES.length?" 🎉 모두 맞혔어요!":"");}
+        else{b.classList.add("wrong");r.classList.remove("shake");void r.offsetWidth;r.classList.add("shake");}
+      };
+      r.appendChild(b);
+    });
+    box.appendChild(r);
+  });
+  $("useOut").textContent=`0 / ${USES.length} 맞힘`;
+})();
+
+
+/* ================= 🧪 더 실험해 보기: 외부 가상실험 =================
+   · 자바실험실(JavaLab): 제목과 URL을 출처로 표시하면 iframe 퍼가기 허용, 소스 코드 복제 금지
+   · 김정식·허명성의 과학사랑: 게시글 CC BY-NC 4.0(저작자표시-비영리)
+   두 곳 모두 코드를 복사하지 않고 원래 페이지를 그대로 불러오거나 링크로 연결해요.
+   mode: "embed" = 이 화면에서 열기 + 새 창 / "link" = 새 창에서만 열기 */
+const SRC={
+  jl:{name:"자바실험실(JavaLab)",tag:"JavaLab",note:""},
+  sl:{name:"김정식·허명성의 과학사랑",tag:"과학사랑",note:" · CC BY-NC 4.0"}
+};
+const SL="https://sciencej1.cafe24.com/sci1/";
+const LABS={
+  1:[
+    {s:"sl",url:SL+"force1.html",title:"물체에 작용하는 힘을 나타내 보기",todo:"힘의 방향과 크기를 화살표로 나타내 보세요. 화살표 길이가 무엇을 뜻하는지 확인해요."},
+    {s:"sl",url:SL+"eoforce.html",title:"힘의 평형 만들기",todo:"두 힘이 평형을 이루도록 맞춰 보세요. 크기와 방향은 어떻게 되어야 할까요?"}],
+  2:[
+    {s:"sl",url:SL+"gravitation1.html",title:"중력의 방향",todo:"지구 여러 곳에서 중력이 어느 쪽을 향하는지 확인해 보세요."},
+    {s:"sl",url:SL+"gravitation2.html",title:"물체에 작용하는 중력의 크기 알아보기",todo:"질량이 커지면 중력의 크기(무게)는 어떻게 달라지나요?"},
+    {s:"sl",url:SL+"wamass.html",title:"지구와 달에서의 무게와 질량",todo:"같은 물체를 지구와 달에서 재 보세요. 무엇이 달라지고 무엇이 그대로인가요?"},
+    {s:"jl",url:"https://javalab.org/ko/gravity_difference_on_several_planet/",title:"여러 행성의 중력 비교 (지구에서 사용하던 저울)",todo:"지구에서 쓰던 저울로 다른 행성에서 몸무게를 재 보세요."},
+    {s:"jl",url:"https://javalab.org/ko/earths_gravity_2/",title:"지구의 중력",todo:"물체가 끌려가는 방향이 모두 어디를 향하는지 살펴보세요."}],
+  3:[
+    {s:"sl",url:SL+"elasticforce.html",title:"원래 모양으로 되돌아가려는 힘 알아보기",todo:"탄성체를 변형시켰을 때 탄성력의 방향과 크기를 확인해 보세요."},
+    {s:"sl",url:SL+"elasticforce2.html",title:"용수철의 탄성력 측정하기",todo:"용수철이 늘어난 길이와 탄성력 사이에 어떤 관계가 있는지 찾아보세요."},
+    {s:"jl",url:"https://javalab.org/ko/spring_scale/",title:"용수철 저울",todo:"슬라이더로 질량을 바꾸며 눈금을 읽고, 체크박스로 중력과 탄성력을 표시해 비교해 보세요."},
+    {s:"sl",url:"https://sciencelove.com/2369",title:"용수철을 이용한 물체의 무게 측정",todo:"용수철로 물체의 무게를 재는 방법을 알아보세요.",mode:"link"}],
+  4:[
+    {s:"sl",url:"https://sciencej1.cafe24.com/html5/friction/friction.html",title:"물체의 운동을 방해하는 힘 알아보기",todo:"물체의 무게와 바닥면을 바꾸며 마찰력의 크기를 비교해 보세요."},
+    {s:"sl",url:SL+"AR_friction.html",title:"AR 마찰력 실험 – 사람이 상자 밀기",todo:"카메라(AR)를 사용해요. 상자를 밀 때 마찰력이 어떻게 작용하는지 관찰해 보세요.",mode:"link",ar:true},
+    {s:"sl",url:"https://sciencelove.com/483059",title:"마찰력 가상실험",todo:"마찰력에 영향을 주는 조건을 더 실험해 보세요.",mode:"link"}],
+  5:[
+    {s:"sl",url:SL+"buoyancy1.html",title:"물속에서 물체가 받는 힘 관찰하기",todo:"물속에 있는 물체가 받는 힘의 방향과 크기를 관찰해 보세요."},
+    {s:"sl",url:SL+"buoyancy2.html",title:"물속에서 부력 측정하기",todo:"물에 잠긴 부피가 커질수록 부력은 어떻게 변하나요?"},
+    {s:"jl",url:"https://javalab.org/ko/buoyancy/",title:"부력 실험",todo:"물체를 물에 넣었을 때 저울 눈금 변화로 부력을 확인해 보세요."},
+    {s:"jl",url:"https://javalab.org/ko/buoyancy_comparison/",title:"부력 비교 실험",todo:"여러 조건에서 부력을 비교해 보세요."},
+    {s:"sl",url:"https://sciencelove.com/2274",title:"부력 가상 실험",todo:"부력에 대해 더 실험해 보세요.",mode:"link"}],
+  6:[
+    {s:"sl",url:SL+"resultantforce.html",title:"물체에 작용하는 두 힘의 합력",todo:"‘합력’은 교과서의 ‘알짜힘’과 같은 뜻이에요. 두 힘이 같은 방향일 때와 반대 방향일 때를 비교해 보세요."},
+    {s:"sl",url:SL+"ant.html",title:"개미들의 움직임 이용 – 힘의 합력",todo:"여러 개미가 끄는 힘을 합하면 물체는 어느 쪽으로 움직일까요?"},
+    {s:"jl",url:"https://javalab.org/ko/addition_of_force/",title:"힘의 합력",todo:"교과서에서는 나란한 두 힘만 다루니, 같은 방향과 반대 방향인 경우를 중심으로 살펴보세요."}],
+  7:[
+    {s:"sl",url:SL+"forcegame.html",title:"힘이 작용한 물체의 운동 상태 알아보기 (공 옮기기 게임)",todo:"공에 힘을 주어 목표까지 옮겨 보세요. 힘의 방향에 따라 속력과 운동 방향이 어떻게 변하나요?"},
+    {s:"sl",url:SL+"forcef.html",title:"힘을 받은 물체의 운동 상태 분류하기",todo:"놀이 기구의 운동을 속력과 운동 방향의 변화로 분류해 보세요."},
+    {s:"jl",url:"https://javalab.org/ko/rocket_and_principle_of_inertia/",title:"감속 엔진이 없는 우주 비행선",todo:"엔진을 끄면(알짜힘 0) 우주선은 어떻게 움직일까요?"},
+    {s:"jl",url:"https://javalab.org/ko/force_movement/",title:"F = ma (뉴턴의 운동 법칙)",todo:"힘의 방향이 운동 방향과 같을 때와 반대일 때 속력 변화를 비교해 보세요."},
+    {s:"jl",url:"https://javalab.org/ko/pendulum/",title:"진자를 움직이는 힘",todo:"진자는 속력과 운동 방향이 모두 변해요. 어디에서 빠르고 어디에서 느린가요?"},
+    {s:"sl",url:SL+"AR_force.html",title:"AR 힘과 운동 – 손선풍기를 이용한 힘의 작용",todo:"카메라(AR)를 사용해요. 바람(힘)을 받은 물체의 운동 변화를 관찰해 보세요.",mode:"link",ar:true},
+    {s:"sl",url:SL+"blackhole.html",title:"블랙홀 주변의 별들의 운동",todo:"중력을 받은 별의 속력과 운동 방향이 어떻게 변하는지 관찰해 보세요."},
+    {s:"sl",url:"https://sciencelove.com/2654",title:"힘과 속력 변화 (우주선 조종 게임)",todo:"힘을 주는 방향을 바꿔 우주선을 조종해 보세요.",mode:"link"}],
+  8:[
+    {s:"sl",url:SL+"eoforces.html",title:"힘의 평형을 이루는 다양한 사례 조사하기",todo:"생활 속 물체에서 평형을 이루는 두 힘을 찾아보세요."},
+    {s:"sl",url:"https://sciencelove.com/483176",title:"자격루",todo:"물시계 자격루는 어떤 힘을 이용해 움직일까요?",mode:"link"},
+    {s:"jl",url:"https://javalab.org/ko/balloon/",title:"풍선에 가해지는 압력, 부력, 중력",todo:"풍선이 떠오를 때와 내려올 때 중력과 부력의 크기를 비교해 보세요."}],
+  9:[
+    {s:"sl",url:SL+"force5.html",title:"힘 단원 정리",todo:"종합 평가 전에 힘의 정의와 여러 가지 힘을 한 번 더 정리해 보세요."}]
+};
+const LAB_ALL=Object.values(LABS).flat().map(x=>x.url);
+SPECIAL.sj={icon:"🧪",name:"가상실험 탐험가",desc:`더 실험해 보기 ${LAB_ALL.length}개를 모두 열어 봤어요`};
+state.jl=state.jl||{};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+Object.entries(LABS).forEach(([idx,list])=>{
+  const sec=lessons[+idx], quiz=sec.querySelector(".quiz");
+  const card=document.createElement("div"); card.className="card jl";
+  card.innerHTML=`<span class="step-tag">🧪 더 실험해 보기 · 가상실험 ${list.length}개</span><h3>가상실험으로 확인해 보자</h3>`;
+  list.forEach(item=>{
+    const src=SRC[item.s], mode=item.mode||"embed", url=item.url;
+    const box=document.createElement("div"); box.className="jlitem";
+    box.innerHTML=`<span class="srcTag ${item.s}">${src.tag}</span>${item.ar?' <span class="srcTag ar">📷 AR</span>':''} <b class="t">${esc(item.title)}</b>
+      <div class="todo">🎯 ${esc(item.todo)}${item.ar?" <br>📱 카메라를 쓰는 실험이라 태블릿이나 휴대폰에서 새 창으로 여는 것이 좋아요.":""}</div>
+      <div class="jlbtns">${mode==="embed"?'<button class="open">▶ 이 화면에서 열기</button>':''}<a href="${url}" target="_blank" rel="noopener">↗ 새 창에서 열기</a></div>
+      ${mode==="embed"?`<div class="jlframe"><iframe loading="lazy" allowfullscreen allow="fullscreen; accelerometer; gyroscope" title="${esc(item.title)}"></iframe>
+      <div class="tip">화면이 비어 있거나 열리지 않으면 ‘↗ 새 창에서 열기’를 눌러 주세요.</div></div>`:''}
+      <div class="jlsrc">출처: ${src.name} 「${esc(item.title)}」 <a href="${url}" target="_blank" rel="noopener">${url}</a>${src.note}</div>`;
+    const opened=()=>{
+      if(state.jl[url]) return;
+      state.jl[url]=true; save(); addXP(3,"🧪 가상실험 탐구");
+      if(LAB_ALL.every(k=>state.jl[k])) award("sj");
+    };
+    const btn=box.querySelector(".open");
+    if(btn){
+      const fr=box.querySelector(".jlframe"), ifr=fr.querySelector("iframe");
+      btn.onclick=()=>{
+        const show=fr.style.display!=="block";
+        if(show&&!ifr.src) ifr.src=url;
+        fr.style.display=show?"block":"none";
+        btn.textContent=show?"▲ 접기":"▶ 이 화면에서 열기";
+        if(show) opened();
+      };
+    }
+    box.querySelector("a").addEventListener("click",opened);
+    card.appendChild(box);
+  });
+  sec.insertBefore(card,quiz);
+});
+
+/* ================= 실험 탐구 보너스 ================= */
+document.querySelectorAll(".sim").forEach((s,i)=>{
+  let c=0;
+  const h=()=>{
+    if(state.sims[i]) return;
+    if(++c>=3){
+      state.sims[i]=true; save(); addXP(5,"🔬 탐구 보너스");
+      if(Object.keys(state.sims).length>=SIM_COUNT) award("sx");
+    }
+  };
+  s.addEventListener("input",h);
+  s.addEventListener("click",e=>{if(e.target.tagName==="BUTTON")h();});
+});
+
+
+/* ================= 👩‍🏫 선생님 모드 ================= */
+function teacherMode(){
+  if(!TEACHER) return;
+  const ban=document.createElement("div"); ban.className="tbanner";
+  ban.textContent="👩‍🏫 선생님 모드 · 학생 기록과 따로 저장돼요";
+  document.body.insertBefore(ban,document.body.firstChild);
+  const p=document.createElement("div"); p.id="tpanel";
+  p.innerHTML=`<div class="th" id="tHead"><span>👩‍🏫 선생님 도구</span><span id="tFold">▾</span></div>
+  <div class="tb">
+    <button id="tConn">🔌 구글 시트 연결 테스트</button>
+    <div class="tmsg" id="tMsg">${SHEET_URL?"시트 주소가 들어가 있어요. 위 버튼으로 연결을 확인해 보세요.":"⚠️ index.html의 SHEET_URL이 비어 있어요. 웹 앱 주소를 넣어야 기록이 시트로 가요."}</div>
+    <button id="tSend">☁️ 내 테스트 기록도 시트로 보내기</button>
+    <button id="tAns">👁 정답 표시하기</button>
+    <button id="tAuto">⚡ 이 단계 문제 자동으로 풀기</button>
+    <button id="tReset">↺ 선생님 테스트 기록 처음부터</button>
+    <a id="tStudent" target="_blank">📱 학생 화면으로 열기 (새 탭)</a>
+  </div>`;
+  document.body.appendChild(p);
+  if(window.innerWidth<700){p.classList.add("min");}
+  const sync=()=>{$("tSend").classList.toggle("on",!!state.tSend);$("tSend").textContent=state.tSend?"✅ 테스트 기록 시트로 보내는 중":"☁️ 내 테스트 기록도 시트로 보내기";
+    $("tAns").classList.toggle("on",!!state.tAns);document.body.classList.toggle("showans",!!state.tAns);$("tAns").textContent=(state.tAns?"✅ 정답 표시 중":"👁 정답 표시하기");renderSync();};
+  const fold=()=>$("tFold").textContent=p.classList.contains("min")?"▴ 펼치기":"▾ 접기";
+  $("tHead").onclick=()=>{p.classList.toggle("min");fold();}; fold();
+  $("tSend").onclick=()=>{state.tSend=!state.tSend;save();sync();if(state.tSend){report();msg("이제부터 이 화면의 기록이 시트에 ‘0반 0번 "+state.name+"’ 이름으로 쌓여요. 시트 메뉴의 ‘③ 선생님 테스트 기록 지우기’로 한 번에 지울 수 있어요.","ok");}};
+  $("tAns").onclick=()=>{state.tAns=!state.tAns;save();sync();};
+  $("tAuto").onclick=autoSolve;
+  $("tReset").onclick=askReset;
+  $("tStudent").href=location.pathname;
+  $("tConn").onclick=connTest;
+  sync();
+}
+function msg(t,k){const m=$("tMsg");m.className="tmsg "+(k||"");m.textContent=t;}
+async function connTest(){
+  if(!SHEET_URL){msg("⚠️ SHEET_URL이 비어 있어요. Apps Script를 웹 앱으로 배포한 뒤 받은 주소(…/exec)를 index.html의 SHEET_URL에 넣어 주세요.","no");return;}
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(SHEET_URL)&&!/127\.0\.0\.1|localhost/.test(SHEET_URL)) msg("주소 모양이 …/macros/s/…/exec 가 아니에요. 그래도 시도해 볼게요…");
+  else msg("연결 확인 중…");
+  const body=JSON.stringify({token:SHEET_TOKEN,student:{cls:"0",num:"0",name:"연결 테스트"},snap:snapshot(),answer:{id:"conn-"+Date.now(),lesson:"연결 테스트",qno:0,question:"선생님 연결 테스트",result:"테스트",wrongs:""}});
+  try{
+    const res=await fetch(SHEET_URL,{method:"POST",body});
+    const j=await res.json();
+    if(j.ok) msg("✅ 연결 성공! 시트의 ‘학생현황’에 ‘0반 0번 연결 테스트’ 줄이 생겼어요. (시트 메뉴 ③으로 지울 수 있어요)","ok");
+    else if(j.error==="token") msg("❌ 시트에는 닿았지만 암호가 달라요. index.html의 SHEET_TOKEN과 Code.gs의 TOKEN을 똑같이 맞춰 주세요.","no");
+    else msg("❌ 시트가 거절했어요: "+j.error+" (잠시 뒤 다시 시도해 보세요)","no");
+  }catch(e){
+    try{
+      await fetch(SHEET_URL,{method:"POST",mode:"no-cors",body});
+      msg("📨 보내기는 했지만 답장을 읽지 못했어요. 시트 ‘학생현황’에 ‘0반 0번 연결 테스트’ 줄이 생겼는지 직접 확인해 주세요. 안 생겼다면 배포 설정의 ‘액세스 권한: 모든 사용자’를 확인하세요.");
+    }catch(e2){msg("❌ 연결 실패. 인터넷 연결과 SHEET_URL 주소를 확인해 주세요.","no");}
+  }
+}
+async function autoSolve(){
+  const sec=lessons[state.page], wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const qz=sec.querySelector(".quiz");
+  if(!qz){if(state.page===0&&!state.done[0]){$("startBtn").click();}else toast("이 화면에는 문제가 없어요","lock");return;}
+  for(const opts of qz.querySelectorAll(".opts")){
+    const a=opts.querySelector("button.ans");
+    if(a&&!a.disabled){a.click();await wait(150);}
+  }
+}
+
+/* ================= 시작 ================= */
+drawArrow(); drawG(); drawSp(); drawFr(); drawBy(); drawNet(); mvStatic(); subAnim();
+renderStats(); lockIdentity(); quizChecks.forEach(f=>f()); teacherMode(); flush(); checkReset();
+try{if(sessionStorage.getItem("force-reset-notice")){sessionStorage.removeItem("force-reset-notice");
+  celebrate("↺","선생님이 학습 기록을 초기화했어요","반·번호·이름을 다시 적고 처음부터 시작해요.",true);}}catch(e){}
+if(!unlocked(state.page)) state.page=0;
+go(state.page);
+</script>
+</body>
+</html>
